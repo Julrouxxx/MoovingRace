@@ -3,15 +3,80 @@ package upsaclay.moovingrace.components;
 import upsaclay.moovingrace.utils.TrackRotation;
 import upsaclay.moovingrace.utils.TrackType;
 
+import javax.imageio.ImageIO;
 import javax.swing.*;
+import java.awt.*;
+import java.awt.image.BufferedImage;
+import java.io.IOException;
+import java.util.Dictionary;
+import java.util.HashMap;
+import java.util.Map;
+import java.util.Objects;
+
+import static upsaclay.moovingrace.utils.TrackType.TRACK_CLASSIC;
 
 public class TrackTile extends JComponent {
-    private TrackType type;
-    private TrackRotation rotation;
+    public static Map<TrackType, Image> sprites;
+    private TrackTileModel model;
+    private TrackTileUI ui;
 
     public TrackTile(TrackType type, TrackRotation rotation) {
-        this.type = type;
-        this.rotation = rotation;
+        InitSprites();
 
+        this.model = new TrackTileModel(type, rotation);
+
+        this.ui = new TrackTileUI(this);
+    }
+
+    public TrackTileModel getModel() {
+        return model;
+    }
+
+    public TrackTileUI getUi() {
+        return ui;
+    }
+
+    @Override
+    public void paintComponent(Graphics g) {
+        this.ui.paint((Graphics2D)g, this);
+    }
+
+    public Dimension getMinimumSize() { return getPreferredSize(); }
+    public Dimension getPreferredSize() {
+        return new Dimension(64, 64);
+    }
+    public Dimension getMaximumSize() { return getPreferredSize(); }
+
+    public void InitSprites()
+    {
+        if(sprites != null) return;
+
+        sprites = new HashMap<>();
+
+        for (TrackType type : TrackType.values()) {
+            BufferedImage spriteSheets = null;
+            try {
+                spriteSheets = ImageIO.read(Objects.requireNonNull(getClass().getResource("/Sprites/track_sprites.png")));
+            } catch (IOException e) {
+                e.printStackTrace();
+            }
+            if(spriteSheets == null) continue;
+
+            switch(type)
+            {
+                case TRACK_CLASSIC:
+                    sprites.put(TRACK_CLASSIC, spriteSheets.getSubimage(64, 0, 64, 64));
+                    break;
+                case TRACK_SHIFT:
+                    sprites.put(TRACK_CLASSIC, spriteSheets.getSubimage(128, 0, 64, 64));
+                    break;
+                case TRACK_START:
+                    sprites.put(TRACK_CLASSIC, spriteSheets.getSubimage(0, 64, 64, 64));
+                    break;
+                case TRACK_END:
+                    sprites.put(TRACK_CLASSIC, spriteSheets.getSubimage(0, 0, 64, 64));
+                    break;
+            }
+        }
     }
 }
