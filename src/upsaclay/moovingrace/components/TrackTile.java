@@ -8,12 +8,10 @@ import javax.swing.*;
 import java.awt.*;
 import java.awt.image.BufferedImage;
 import java.io.IOException;
-import java.util.Dictionary;
 import java.util.HashMap;
 import java.util.Map;
 import java.util.Objects;
 
-import static upsaclay.moovingrace.utils.TrackType.TRACK_CLASSIC;
 
 public class TrackTile extends JComponent {
     public static Map<TrackType, Image> sprites;
@@ -49,7 +47,7 @@ public class TrackTile extends JComponent {
 
     public void InitSprites()
     {
-        if(sprites != null) return;
+        if(sprites != null && !sprites.isEmpty()) return;
 
         sprites = new HashMap<>();
 
@@ -61,20 +59,19 @@ public class TrackTile extends JComponent {
                 e.printStackTrace();
             }
             if(spriteSheets == null) continue;
-
             switch(type)
             {
                 case TRACK_CLASSIC:
-                    sprites.put(TRACK_CLASSIC, spriteSheets.getSubimage(64, 0, 64, 64));
+                    sprites.put(TrackType.TRACK_CLASSIC, spriteSheets.getSubimage(64, 0, 64, 64));
                     break;
                 case TRACK_SHIFT:
-                    sprites.put(TRACK_CLASSIC, spriteSheets.getSubimage(128, 0, 64, 64));
+                    sprites.put(TrackType.TRACK_SHIFT, spriteSheets.getSubimage(128, 0, 64, 64));
                     break;
                 case TRACK_START:
-                    sprites.put(TRACK_CLASSIC, spriteSheets.getSubimage(0, 64, 64, 64));
+                    sprites.put(TrackType.TRACK_START, spriteSheets.getSubimage(0, 64, 64, 64));
                     break;
                 case TRACK_END:
-                    sprites.put(TRACK_CLASSIC, spriteSheets.getSubimage(0, 0, 64, 64));
+                    sprites.put(TrackType.TRACK_END, spriteSheets.getSubimage(0, 0, 64, 64));
                     break;
             }
         }

@@ -4,12 +4,8 @@ import upsaclay.moovingrace.components.TrackTile;
 import upsaclay.moovingrace.utils.TrackRotation;
 import upsaclay.moovingrace.utils.TrackType;
 
-import javax.imageio.ImageIO;
 import javax.swing.*;
 import java.awt.*;
-import java.awt.image.BufferedImage;
-import java.io.IOException;
-import java.util.Objects;
 
 public class MoovingRaceWindow extends JFrame {
 
@@ -27,10 +23,10 @@ public class MoovingRaceWindow extends JFrame {
         panel.setBackground(Color.green);
         add(panel, BorderLayout.CENTER);
 
-        TrackTile trackTile = new TrackTile(TrackType.TRACK_CLASSIC, TrackRotation.EAST);
-        loadImage(0, 0);
-        loadImage(64, 64);
-        loadImage( 128, 128);
+        loadImage(0, 0, TrackType.TRACK_CLASSIC, TrackRotation.NORTH);
+        loadImage(64, 64, TrackType.TRACK_CLASSIC, TrackRotation.EAST);
+        loadImage( 128, 128, TrackType.TRACK_SHIFT, TrackRotation.NORTH);
+        loadImage( 256, 128, TrackType.TRACK_SHIFT, TrackRotation.EAST);
 
 
         pack();
@@ -38,9 +34,9 @@ public class MoovingRaceWindow extends JFrame {
     }
 
 
-    private void loadImage(int x, int y) {
+    private void loadImage(int x, int y, TrackType type, TrackRotation rotation) {
 
-        TrackTile trackTile = new TrackTile(TrackType.TRACK_CLASSIC, TrackRotation.EAST);
+        TrackTile trackTile = new TrackTile(type, rotation);
         trackTile.setBounds(x, y, 64, 64);
 
         panel.add(trackTile);
