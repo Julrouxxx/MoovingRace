@@ -18,10 +18,10 @@ public class TrackTile extends JComponent {
     private TrackTileModel model;
     private TrackTileUI ui;
 
-    public TrackTile(TrackType type, TrackRotation rotation) {
+    public TrackTile(TrackType type, TrackRotation rotation, int scale, Point position) {
         InitSprites();
 
-        this.model = new TrackTileModel(type, rotation);
+        this.model = new TrackTileModel(type, rotation, scale, position);
 
         this.ui = new TrackTileUI(this);
     }
@@ -33,9 +33,17 @@ public class TrackTile extends JComponent {
     public TrackTileUI getUi() {
         return ui;
     }
+    public void setScale(float scale){
+        model.setScale(scale);
+        System.out.println((int)( getModel().getPosition().getX()*scale));
+        setBounds(Math.round(((float) getModel().getPosition().getX())*scale), Math.round (((float) getModel().getPosition().getY())*scale), Math.round(scale*64), Math.round(scale*64));
+    }
+
 
     @Override
     public void paintComponent(Graphics g) {
+        ((Graphics2D) g).setRenderingHint(RenderingHints.KEY_ANTIALIASING,
+                RenderingHints.VALUE_ANTIALIAS_ON);
         this.ui.paint((Graphics2D)g, this);
     }
 

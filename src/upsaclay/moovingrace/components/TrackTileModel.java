@@ -10,10 +10,21 @@ public class TrackTileModel {
     private TrackType type;
     private TrackRotation rotation;
     private Point position;
+    private float scale;
 
-    public TrackTileModel(TrackType type, TrackRotation rotation) {
+    public TrackTileModel(TrackType type, TrackRotation rotation, float scale, Point position) {
         this.type = type;
         this.rotation = rotation;
+        this.scale = scale;
+        this.position = position;
+    }
+
+    public void setScale(float scale) {
+        this.scale = scale;
+    }
+
+    public float getScale() {
+        return scale;
     }
 
     public TrackType getType() {

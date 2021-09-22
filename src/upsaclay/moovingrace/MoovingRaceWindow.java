@@ -1,13 +1,12 @@
 package upsaclay.moovingrace;
 
 import upsaclay.moovingrace.components.TrackTile;
-import upsaclay.moovingrace.utils.MapManager;
-import upsaclay.moovingrace.utils.Track;
-import upsaclay.moovingrace.utils.TrackRotation;
-import upsaclay.moovingrace.utils.TrackType;
+import upsaclay.moovingrace.utils.*;
 
 import javax.swing.*;
 import java.awt.*;
+import java.awt.event.ComponentAdapter;
+import java.awt.event.ComponentEvent;
 
 public class MoovingRaceWindow extends JFrame {
 
@@ -24,9 +23,22 @@ public class MoovingRaceWindow extends JFrame {
         panel.setLayout(null);
         panel.setBackground(Color.green);
         add(panel, BorderLayout.CENTER);
-
-        for (Track track : MapManager.getInstance().getMapByName("classic").getTracks()) {
-            loadImage(track.getPositionX(64), track.getPositionY(64), track.getType(), track.getRotation());
+        addComponentListener(new ComponentAdapter() {
+            @Override
+            public void componentResized(ComponentEvent e) {
+                super.componentResized(e);
+                float scale = (float) (Math.round(getHeight() * 64.0/400) / 64.0);
+                System.out.println(scale);
+                for (Component component : panel.getComponents()) {
+                    if(component instanceof TrackTile){
+                        ((TrackTile) component).setScale(scale);
+                    }
+                }
+            }
+        });
+        Map map = MapManager.getInstance().getMapByName("classic");
+        for (Track track : map.getTracks()) {
+            loadImage(track.getPositionX(map.getScale()), track.getPositionY(map.getScale()), track.getType(), track.getRotation(), map.getScale());
         }
 
 
@@ -35,10 +47,10 @@ public class MoovingRaceWindow extends JFrame {
     }
 
 
-    private void loadImage(int x, int y, TrackType type, TrackRotation rotation) {
+    private void loadImage(int x, int y, TrackType type, TrackRotation rotation, int scale) {
 
-        TrackTile trackTile = new TrackTile(type, rotation);
-        trackTile.setBounds(x, y, 64, 64);
+        TrackTile trackTile = new TrackTile(type, rotation, scale, new Point(x, y));
+        trackTile.setScale(scale);
 
         panel.add(trackTile);
 

@@ -5,7 +5,7 @@ import upsaclay.moovingrace.utils.*;
 public class Main {
 
     public static void main(String[] args) {
-        Map map = new Map("classic");
+        Map map = new Map("classic", 64);
         map.getTracks().add(new Track(TrackType.TRACK_SHIFT, TrackRotation.NORTH, 0, 0));
         map.getTracks().add(new Track(TrackType.TRACK_CLASSIC, TrackRotation.EAST, 1, 0));
         map.getTracks().add(new Track(TrackType.TRACK_SHIFT, TrackRotation.WEST, 2, 0));

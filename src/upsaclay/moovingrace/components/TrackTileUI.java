@@ -16,9 +16,11 @@ public class TrackTileUI {
 
         TrackTileModel model = trackTile.getModel();
         Image sprite = getImage(model.getType());
-        System.out.println(trackTile.getModel().getRotation().getRotation());
+        sprite = sprite.getScaledInstance( Math.round(model.getScale()*64), Math.round(model.getScale()*64), Image.SCALE_DEFAULT);
         int angle = model.getRotation().getRotation();
-        AffineTransform rotation = AffineTransform.getRotateInstance(Math.toRadians(angle), sprite.getWidth(null)/2.0, sprite.getHeight(null)/2.0);
+        AffineTransform rotation = AffineTransform.getRotateInstance(Math.toRadians(angle),
+                sprite.getWidth(null)/2.0,
+                sprite.getHeight(null)/2.0);
         g.drawImage(sprite, rotation, null);
     }
 
