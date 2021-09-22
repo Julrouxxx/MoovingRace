@@ -1,6 +1,8 @@
 package upsaclay.moovingrace;
 
 import upsaclay.moovingrace.components.TrackTile;
+import upsaclay.moovingrace.utils.MapManager;
+import upsaclay.moovingrace.utils.Track;
 import upsaclay.moovingrace.utils.TrackRotation;
 import upsaclay.moovingrace.utils.TrackType;
 
@@ -23,10 +25,9 @@ public class MoovingRaceWindow extends JFrame {
         panel.setBackground(Color.green);
         add(panel, BorderLayout.CENTER);
 
-        loadImage(0, 0, TrackType.TRACK_CLASSIC, TrackRotation.NORTH);
-        loadImage(64, 64, TrackType.TRACK_CLASSIC, TrackRotation.EAST);
-        loadImage( 128, 128, TrackType.TRACK_SHIFT, TrackRotation.NORTH);
-        loadImage( 256, 128, TrackType.TRACK_SHIFT, TrackRotation.EAST);
+        for (Track track : MapManager.getInstance().getMapByName("classic").getTracks()) {
+            loadImage(track.getPositionX(64), track.getPositionY(64), track.getType(), track.getRotation());
+        }
 
 
         pack();

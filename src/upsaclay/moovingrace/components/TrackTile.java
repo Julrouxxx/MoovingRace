@@ -59,6 +59,7 @@ public class TrackTile extends JComponent {
                 e.printStackTrace();
             }
             if(spriteSheets == null) continue;
+
             switch(type)
             {
                 case TRACK_CLASSIC:
