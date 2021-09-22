@@ -35,15 +35,14 @@ public class TrackTile extends JComponent {
     }
     public void setScale(float scale){
         model.setScale(scale);
-        System.out.println((int)( getModel().getPosition().getX()*scale));
         setBounds(Math.round(((float) getModel().getPosition().getX())*scale), Math.round (((float) getModel().getPosition().getY())*scale), Math.round(scale*64), Math.round(scale*64));
     }
 
 
     @Override
     public void paintComponent(Graphics g) {
-        ((Graphics2D) g).setRenderingHint(RenderingHints.KEY_ANTIALIASING,
-                RenderingHints.VALUE_ANTIALIAS_ON);
+      //  ((Graphics2D) g).setRenderingHint(RenderingHints.KEY_ANTIALIASING,
+      //          RenderingHints.VALUE_ANTIALIAS_ON);
         this.ui.paint((Graphics2D)g, this);
     }
 

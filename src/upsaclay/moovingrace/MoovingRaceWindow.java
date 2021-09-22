@@ -28,7 +28,6 @@ public class MoovingRaceWindow extends JFrame {
             public void componentResized(ComponentEvent e) {
                 super.componentResized(e);
                 float scale = (float) (Math.round(getHeight() * 64.0/400) / 64.0);
-                System.out.println(scale);
                 for (Component component : panel.getComponents()) {
                     if(component instanceof TrackTile){
                         ((TrackTile) component).setScale(scale);
