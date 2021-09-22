@@ -36,7 +36,7 @@ public class MoovingRaceWindow extends JFrame {
                 }
             }
         });
-        Map map = MapManager.getInstance().getMapByName("classic");
+        Map map = MapManager.getInstance().getMapByName("complex");
         for (Track track : map.getTracks()) {
             loadImage(track.getPositionX(map.getScale()), track.getPositionY(map.getScale()), track.getType(), track.getRotation(), map.getScale());
         }
