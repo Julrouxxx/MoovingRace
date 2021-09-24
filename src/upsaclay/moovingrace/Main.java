@@ -4,6 +4,7 @@ import upsaclay.moovingrace.utils.*;
 
 public class Main {
 
+
     public static void main(String[] args) {
         Map complexMap = new Map("complex", 64);
         complexMap.getTracks().add(new Track(TrackType.TRACK_START, TrackRotation.EAST, 1,0));

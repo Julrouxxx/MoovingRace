@@ -1,5 +1,6 @@
 package upsaclay.moovingrace.components;
 
+import upsaclay.moovingrace.MoovingRaceWindow;
 import upsaclay.moovingrace.utils.TrackRotation;
 import upsaclay.moovingrace.utils.TrackType;
 
@@ -35,9 +36,15 @@ public class TrackTile extends JComponent {
     }
     public void setScale(float scale){
         model.setScale(scale);
-        setBounds(Math.round(((float) getModel().getPosition().getX())*scale),
-                Math.round (((float) getModel().getPosition().getY())*scale),
-                Math.round(scale*64)+1, Math.round(scale*64)+1);
+        refreshBound();
+    }
+
+    public void refreshBound() {
+
+        setBounds(Math.round(((float) getModel().getPosition().getX())*model.getScale()),
+                Math.round (((float) getModel().getPosition().getY())*model.getScale()),
+                Math.round(model.getScale()*64)+1 + MoovingRaceWindow.positionTranslate.x,
+                Math.round(model.getScale()*64)+1 + MoovingRaceWindow.positionTranslate.y);
     }
 
 

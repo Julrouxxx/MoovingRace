@@ -1,5 +1,6 @@
 package upsaclay.moovingrace.components;
 
+import upsaclay.moovingrace.MoovingRaceWindow;
 import upsaclay.moovingrace.utils.TrackType;
 
 import java.awt.*;
@@ -14,6 +15,8 @@ public class TrackTileUI {
 
     public void paint(Graphics2D g, TrackTile trackTile) {
 
+        g.translate(MoovingRaceWindow.positionTranslate.getX(), MoovingRaceWindow.positionTranslate.getY());
+        trackTile.refreshBound();
         TrackTileModel model = trackTile.getModel();
         Image sprite = getImage(model.getType());
         sprite = sprite.getScaledInstance( Math.round(model.getScale()*64)+1, Math.round(model.getScale()*64)+1, Image.SCALE_DEFAULT);

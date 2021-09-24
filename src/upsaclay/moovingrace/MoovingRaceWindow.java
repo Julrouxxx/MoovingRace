@@ -7,10 +7,13 @@ import javax.swing.*;
 import java.awt.*;
 import java.awt.event.ComponentAdapter;
 import java.awt.event.ComponentEvent;
+import java.awt.event.KeyAdapter;
+import java.awt.event.KeyEvent;
 
 public class MoovingRaceWindow extends JFrame {
 
     JPanel panel;
+    public static Point positionTranslate;
 
     public MoovingRaceWindow() {
 
@@ -19,6 +22,24 @@ public class MoovingRaceWindow extends JFrame {
         setPreferredSize(new Dimension(600, 400));
         setDefaultCloseOperation(EXIT_ON_CLOSE);
 
+        positionTranslate = new Point(10, 10);
+        addKeyListener(new KeyAdapter() {
+            @Override
+            public void keyPressed(KeyEvent e) {
+                System.out.println("test");
+                super.keyPressed(e);
+                if(e.getKeyCode() == KeyEvent.VK_LEFT) {
+                    positionTranslate.x--;
+                } else if(e.getKeyCode() == KeyEvent.VK_RIGHT) {
+                    positionTranslate.x++;
+                } else if(e.getKeyCode() == KeyEvent.VK_UP) {
+                    positionTranslate.y--;
+                } else if(e.getKeyCode() == KeyEvent.VK_DOWN) {
+                    positionTranslate.y++;
+                }
+                repaint();
+            }
+        });
         panel = new JPanel();
         panel.setLayout(null);
         panel.setBackground(Color.green);
@@ -27,7 +48,7 @@ public class MoovingRaceWindow extends JFrame {
             @Override
             public void componentResized(ComponentEvent e) {
                 super.componentResized(e);
-                float scale = (float) (Math.round(getHeight() * 64.0/400) / 64.0);
+                float scale = (float) (Math.round(getHeight() * 64.0/200) / 64.0);
 
                 for (Component component : panel.getComponents()) {
                     if(component instanceof TrackTile){
@@ -40,6 +61,7 @@ public class MoovingRaceWindow extends JFrame {
         for (Track track : map.getTracks()) {
             loadImage(track.getPositionX(map.getScale()), track.getPositionY(map.getScale()), track.getType(), track.getRotation(), map.getScale());
         }
+
 
 
         pack();
