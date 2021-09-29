@@ -1,5 +1,6 @@
 package upsaclay.moovingrace;
 
+import upsaclay.moovingrace.components.car.Car;
 import upsaclay.moovingrace.components.tracktile.TrackTile;
 import upsaclay.moovingrace.utils.*;
 
@@ -14,6 +15,7 @@ public class MoovingRaceWindow extends JFrame {
 
     JPanel panel;
     public static Point positionTranslate;
+    public static float scale;
 
     public MoovingRaceWindow() {
 
@@ -26,7 +28,6 @@ public class MoovingRaceWindow extends JFrame {
         addKeyListener(new KeyAdapter() {
             @Override
             public void keyPressed(KeyEvent e) {
-                System.out.println("test");
                 super.keyPressed(e);
                 if(e.getKeyCode() == KeyEvent.VK_LEFT) {
                     positionTranslate.x--;
@@ -48,20 +49,24 @@ public class MoovingRaceWindow extends JFrame {
             @Override
             public void componentResized(ComponentEvent e) {
                 super.componentResized(e);
-                float scale = (float) (Math.round(getHeight() * 64.0/200) / 64.0);
+                scale = (float) (Math.round(getHeight() * 64.0/200) / 64.0);
 
                 for (Component component : panel.getComponents()) {
                     if(component instanceof TrackTile){
-                        ((TrackTile) component).setScale(scale);
+                        ((TrackTile) component).refreshBound();
+                    } else if(component instanceof Car){
+                        ((Car) component).refreshBound();
                     }
                 }
             }
         });
         Map map = MapManager.getInstance().getMapByName("complex");
         for (Track track : map.getTracks()) {
-            loadImage(track.getPositionX(map.getScale()), track.getPositionY(map.getScale()), track.getType(), track.getRotation(), map.getScale());
+            //loadImage(track.getPositionX(map.getScale()), track.getPositionY(map.getScale()), track.getType(), track.getRotation(), map.getScale());
         }
 
+        Car car = new Car();
+        panel.add(car);
 
 
         pack();
@@ -72,7 +77,7 @@ public class MoovingRaceWindow extends JFrame {
     private void loadImage(int x, int y, TrackType type, TrackRotation rotation, int scale) {
 
         TrackTile trackTile = new TrackTile(type, rotation, scale, new Point(x, y));
-        trackTile.setScale(scale);
+        trackTile.refreshBound();
 
         panel.add(trackTile);
 

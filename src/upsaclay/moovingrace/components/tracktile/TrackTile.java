@@ -22,7 +22,7 @@ public class TrackTile extends JComponent {
     public TrackTile(TrackType type, TrackRotation rotation, int scale, Point position) {
         InitSprites();
 
-        this.model = new TrackTileModel(type, rotation, scale, position);
+        this.model = new TrackTileModel(type, rotation, position);
 
         this.ui = new TrackTileUI(this);
     }
@@ -34,17 +34,16 @@ public class TrackTile extends JComponent {
     public TrackTileUI getUi() {
         return ui;
     }
-    public void setScale(float scale){
-        model.setScale(scale);
+    public void setScale(){
         refreshBound();
     }
 
     public void refreshBound() {
 
-        setBounds(Math.round(((float) getModel().getPosition().getX())*model.getScale()),
-                Math.round (((float) getModel().getPosition().getY())*model.getScale()),
-                Math.round(model.getScale()*64)+1 + MoovingRaceWindow.positionTranslate.x,
-                Math.round(model.getScale()*64)+1 + MoovingRaceWindow.positionTranslate.y);
+        setBounds(Math.round(((float) getModel().getPosition().getX())*MoovingRaceWindow.scale),
+                Math.round (((float) getModel().getPosition().getY())*MoovingRaceWindow.scale),
+                Math.round(MoovingRaceWindow.scale*64)+1 + MoovingRaceWindow.positionTranslate.x,
+                Math.round(MoovingRaceWindow.scale*64)+1 + MoovingRaceWindow.positionTranslate.y);
     }
 
 
