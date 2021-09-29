@@ -30,8 +30,14 @@ public class Car extends JComponent {
 
         setBounds(Math.round(((float) getModel().getPosition().getX())* MoovingRaceWindow.scale),
                 Math.round (((float) getModel().getPosition().getY())*MoovingRaceWindow.scale),
-                Math.round(MoovingRaceWindow.scale*23) + MoovingRaceWindow.positionTranslate.x,
-                Math.round(MoovingRaceWindow.scale*23) + MoovingRaceWindow.positionTranslate.y);
+                Math.round(MoovingRaceWindow.scale*25),
+                Math.round(MoovingRaceWindow.scale*25));
         repaint();
     }
+
+    public Dimension getMinimumSize() { return getPreferredSize(); }
+    public Dimension getPreferredSize() {
+        return new Dimension(23, 23);
+    }
+    public Dimension getMaximumSize() { return getPreferredSize(); }
 }

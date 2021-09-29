@@ -24,7 +24,7 @@ public class CarModel {
 
         this.positionX = 64;
         this.positionY = 64;
-        this.velocity = 0;
+        this.velocity = 3;
         this.rotation = 0;
 
         new Timer().schedule(new TimerTask() {
