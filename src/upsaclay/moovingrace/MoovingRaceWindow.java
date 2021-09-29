@@ -1,6 +1,6 @@
 package upsaclay.moovingrace;
 
-import upsaclay.moovingrace.components.TrackTile;
+import upsaclay.moovingrace.components.tracktile.TrackTile;
 import upsaclay.moovingrace.utils.*;
 
 import javax.swing.*;

@@ -1,4 +1,4 @@
-package upsaclay.moovingrace.components;
+package upsaclay.moovingrace.components.tracktile;
 
 import upsaclay.moovingrace.MoovingRaceWindow;
 import upsaclay.moovingrace.utils.TrackRotation;

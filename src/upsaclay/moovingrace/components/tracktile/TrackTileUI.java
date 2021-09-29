@@ -1,4 +1,4 @@
-package upsaclay.moovingrace.components;
+package upsaclay.moovingrace.components.tracktile;
 
 import upsaclay.moovingrace.MoovingRaceWindow;
 import upsaclay.moovingrace.utils.TrackType;
@@ -6,7 +6,7 @@ import upsaclay.moovingrace.utils.TrackType;
 import java.awt.*;
 import java.awt.geom.AffineTransform;
 
-import static upsaclay.moovingrace.components.TrackTile.sprites;
+import static upsaclay.moovingrace.components.tracktile.TrackTile.sprites;
 
 public class TrackTileUI {
     public TrackTileUI(TrackTile trackTile) {
