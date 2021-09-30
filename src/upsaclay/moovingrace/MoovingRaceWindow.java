@@ -20,7 +20,6 @@ public class MoovingRaceWindow extends JFrame {
     public MoovingRaceWindow() {
 
         super("MoovingRace");
-        setDefaultCloseOperation(EXIT_ON_CLOSE);
         setPreferredSize(new Dimension(600, 400));
         setDefaultCloseOperation(EXIT_ON_CLOSE);
 

@@ -11,6 +11,7 @@ public class Car extends JComponent {
     public CarUI ui;
 
     public Car() {
+        setFocusable(true);
         carModel = new CarModel(this);
         ui = new CarUI();
     }
