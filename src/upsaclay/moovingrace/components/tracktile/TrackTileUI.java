@@ -15,7 +15,8 @@ public class TrackTileUI {
 
     public void paint(Graphics2D g, TrackTile trackTile) {
 
-        g.translate(MoovingRaceWindow.positionTranslate.getX(), MoovingRaceWindow.positionTranslate.getY());
+        g.translate(MoovingRaceWindow.positionTranslate.getX() - MoovingRaceWindow.positionTranslate.x,
+                MoovingRaceWindow.positionTranslate.getY() - MoovingRaceWindow.positionTranslate.y);
         trackTile.refreshBound();
         TrackTileModel model = trackTile.getModel();
         Image sprite = getImage(model.getType());

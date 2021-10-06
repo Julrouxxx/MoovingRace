@@ -40,10 +40,10 @@ public class TrackTile extends JComponent {
 
     public void refreshBound() {
 
-        setBounds(Math.round(((float) getModel().getPosition().getX())*MoovingRaceWindow.scale),
-                Math.round (((float) getModel().getPosition().getY())*MoovingRaceWindow.scale),
-                Math.round(MoovingRaceWindow.scale*64)+1 + MoovingRaceWindow.positionTranslate.x,
-                Math.round(MoovingRaceWindow.scale*64)+1 + MoovingRaceWindow.positionTranslate.y);
+        setBounds(Math.round(((float) getModel().getPosition().getX() + MoovingRaceWindow.positionTranslate.x)*MoovingRaceWindow.scale),
+                Math.round (((float) getModel().getPosition().getY() + MoovingRaceWindow.positionTranslate.y)*MoovingRaceWindow.scale),
+                Math.round(MoovingRaceWindow.scale*64)+1,
+                Math.round(MoovingRaceWindow.scale*64)+1);
     }
 
 
