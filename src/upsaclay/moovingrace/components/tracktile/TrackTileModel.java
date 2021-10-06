@@ -28,4 +28,12 @@ public class TrackTileModel {
     public Point getPosition() {
         return position;
     }
+
+    public void setType(TrackType type) {
+        this.type = type;
+    }
+
+    public void setRotation(TrackRotation rotation) {
+        this.rotation = rotation;
+    }
 }

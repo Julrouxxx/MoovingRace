@@ -60,6 +60,8 @@ public class TrackTile extends JComponent {
     }
     public Dimension getMaximumSize() { return getPreferredSize(); }
 
+
+
     public void InitSprites()
     {
         if(sprites != null && !sprites.isEmpty()) return;
@@ -88,6 +90,9 @@ public class TrackTile extends JComponent {
                     break;
                 case TRACK_END:
                     sprites.put(TrackType.TRACK_END, spriteSheets.getSubimage(0, 0, 64, 64));
+                    break;
+                case TRACK_BUTTON:
+                    sprites.put(TrackType.TRACK_BUTTON, spriteSheets.getSubimage(64, 64, 64, 64));
                     break;
             }
         }
