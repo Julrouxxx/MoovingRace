@@ -23,7 +23,7 @@ public class MoovingRaceWindow extends JFrame {
         setPreferredSize(new Dimension(600, 400));
         setDefaultCloseOperation(EXIT_ON_CLOSE);
 
-        positionTranslate = new Point(10, 10);
+        positionTranslate = new Point(0, 0);
         addKeyListener(new KeyAdapter() {
             @Override
             public void keyPressed(KeyEvent e) {
@@ -59,15 +59,16 @@ public class MoovingRaceWindow extends JFrame {
                 }
             }
         });
+        Car car = new Car(panel);
+        panel.add(car);
         Map map = MapManager.getInstance().getMapByName("complex");
         for (Track track : map.getTracks()) {
-            //loadImage(track.getPositionX(map.getScale()), track.getPositionY(map.getScale()), track.getType(), track.getRotation(), map.getScale());
+            loadImage(track.getPositionX(map.getScale()), track.getPositionY(map.getScale()), track.getType(), track.getRotation(), map.getScale());
         }
 
-        Car car = new Car();
-        panel.add(car);
 
 
+        car.getModel().start();
         pack();
         repaint();
     }

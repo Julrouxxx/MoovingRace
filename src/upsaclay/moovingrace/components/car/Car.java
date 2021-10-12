@@ -9,11 +9,10 @@ public class Car extends JComponent {
 
     public CarModel carModel;
     public CarUI ui;
-
-    public Car() {
+    public Car(JPanel context) {
         setFocusable(true);
-        carModel = new CarModel(this);
-        ui = new CarUI();
+        this.carModel = new CarModel(this, context);
+        this.ui = new CarUI();
     }
 
     @Override
@@ -28,7 +27,6 @@ public class Car extends JComponent {
         return carModel;
     }
     public void refreshBound() {
-
         setBounds(Math.round(((float) getModel().getPosition().getX())* MoovingRaceWindow.scale),
                 Math.round (((float) getModel().getPosition().getY())*MoovingRaceWindow.scale),
                 Math.round(MoovingRaceWindow.scale*25),

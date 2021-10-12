@@ -1,18 +1,16 @@
 package upsaclay.moovingrace.components.car;
 
+import upsaclay.moovingrace.components.tracktile.TrackTile;
+
 import javax.imageio.ImageIO;
+import javax.swing.*;
 import java.awt.*;
 import java.awt.event.KeyAdapter;
 import java.awt.event.KeyEvent;
-import java.awt.event.KeyListener;
-import java.awt.image.BufferedImage;
 import java.io.IOException;
-import java.util.Objects;
+import java.util.List;
 import java.util.Timer;
-import java.util.TimerTask;
-import java.util.Vector;
-
-import static com.sun.java.accessibility.util.AWTEventMonitor.addKeyListener;
+import java.util.*;
 
 public class CarModel {
 
@@ -22,20 +20,26 @@ public class CarModel {
     private float positionX;
     private float positionY;
     private float velocity;
+    private Car car;
+    private JPanel context;
     private float rotation;
-
+    private List<TrackTile> collisions;
+    private boolean isCollided = false;
     private boolean isUp = false;
     private boolean isDown = false;
     private boolean isRight = false;
     private boolean isLeft = false;
 
-    public CarModel(Car car) {
+    public CarModel(Car car, JPanel context) {
         loadImage();
-
         this.positionX = 64;
         this.positionY = 64;
         this.velocity = 0;
         this.rotation = 0;
+        this.car = car;
+        this.collisions = new ArrayList<>();
+        this.context = context;
+
 
         new Timer().schedule(new TimerTask() {
             @Override
@@ -43,6 +47,10 @@ public class CarModel {
                 updateEvent();
                 updatePosition();
                 updateVelocity();
+                car.refreshBound();
+                isCollided = checkCollision();
+                reverseVelocity();
+                reversePosition();
                 car.refreshBound();
             }
         }, 17, 17);
@@ -79,13 +87,49 @@ public class CarModel {
         });
     }
 
+    private void reverseVelocity() {
+        if(!isCollided){
+            return;
+        }
+        this.velocity = this.velocity / DECELERATION;
+    }
+
+    private void reversePosition() {
+        if(!isCollided){
+            return;
+        }
+        this.positionX -= this.velocity * Math.cos(Math.toRadians(getRotation()));
+        this.positionY -= this.velocity * Math.sin(Math.toRadians(getRotation()));
+        this.velocity = 0;
+        //System.out.println(this.position);
+    }
     private void updatePosition() {
         this.positionX += this.velocity * Math.cos(Math.toRadians(getRotation()));
         this.positionY += this.velocity * Math.sin(Math.toRadians(getRotation()));
         //System.out.println(this.position);
     }
 
+    private boolean checkCollision() {
+        for (TrackTile collision : collisions) {
+
+            if(!collision.getBounds().intersects(car.getBounds())) continue;
+            Point position = new Point(Math.round(positionX), Math.round(positionY));
+            position.translate(-collision.getModel().getPosition().x + 13, -collision.getModel().getPosition().y + 13);
+           //position.translate((velocity > 0) ? 15 : 0, (rotation > 0) ? 15 : 0);
+            if(position.x < 0 || position.y < 0 || collision.getModel().getImage().getWidth(null) <= position.x || collision.getModel().getImage().getHeight(null) <= position.y){
+                continue;
+            }
+            int rgb = collision.getModel().getImage().getRGB(position.x, position.y);
+            int alpha = (rgb & 0xff000000) >>> 24;
+            if(alpha != 0){
+                return false;
+            }
+        }
+        return true;
+    }
+
     private void updateVelocity() {
+
         this.velocity = this.velocity * DECELERATION;
         //System.out.println(this.velocity);
     }
@@ -97,7 +141,12 @@ public class CarModel {
             e.printStackTrace();
         }
     }
-
+    public void start(){
+        for (Component component : context.getComponents()) {
+            if(component instanceof TrackTile)
+                collisions.add(((TrackTile) component));
+        }
+    }
     public Image getSprite() {
         return sprite;
     }
@@ -111,17 +160,18 @@ public class CarModel {
     }
 
     private void impulse(float force) {
+
         velocity += force;
     }
 
     private void rotateRight() {
 
-        rotation = rotation >= 359 ? 0 + velocity : rotation + velocity;
+        rotation = rotation >= 359 ? 0 + velocity/2 + 2 : rotation + velocity/2 + 2;
     }
 
     private void rotateLeft() {
 
-        rotation = rotation <= 0 ? 360 - velocity : rotation - velocity;
+        rotation = rotation <= 0 ? 360 - velocity/2 - 2 : rotation - velocity/2 - 2;
     }
 
     private void updateEvent() {
