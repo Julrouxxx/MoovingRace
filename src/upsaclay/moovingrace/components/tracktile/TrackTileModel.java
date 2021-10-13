@@ -13,12 +13,14 @@ public class TrackTileModel {
 
     private TrackType type;
     private TrackRotation rotation;
+    private boolean isPassed;
     private Point position;
     private GeneralPath collisionShape;
     public TrackTileModel(TrackType type, TrackRotation rotation, Point position) {
         this.type = type;
         this.rotation = rotation;
         this.position = position;
+        this.isPassed = false;
         AffineTransform r = AffineTransform.getRotateInstance(Math.toRadians(this.rotation.getRotation()),
                 TrackTile.sprites.get(type).getWidth(null)/2.0,
                 TrackTile.sprites.get(type).getHeight(null)/2.0);
@@ -34,8 +36,12 @@ public class TrackTileModel {
         return type;
     }
 
-    public void setType(TrackType type) {
-        this.type = type;
+    public void setPassed(boolean passed) {
+        isPassed = passed;
+    }
+
+    public boolean isPassed() {
+        return isPassed;
     }
 
     public TrackRotation getRotation() {

@@ -1,6 +1,8 @@
 package upsaclay.moovingrace.components.car;
 
+import upsaclay.moovingrace.MoovingRaceWindow;
 import upsaclay.moovingrace.components.tracktile.TrackTile;
+import upsaclay.moovingrace.utils.TrackType;
 
 import javax.imageio.ImageIO;
 import javax.swing.*;
@@ -19,6 +21,8 @@ public class CarModel {
     private final float DECELERATION = 0.98f;
     private float positionX;
     private float positionY;
+    private float offSetX;
+    private float offSetY;
     private float velocity;
     private Car car;
     private JPanel context;
@@ -32,14 +36,11 @@ public class CarModel {
 
     public CarModel(Car car, JPanel context) {
         loadImage();
-        this.positionX = 64;
-        this.positionY = 64;
         this.velocity = 0;
         this.rotation = 0;
         this.car = car;
         this.collisions = new ArrayList<>();
         this.context = context;
-
 
         new Timer().schedule(new TimerTask() {
             @Override
@@ -52,6 +53,9 @@ public class CarModel {
                 reverseVelocity();
                 reversePosition();
                 car.refreshBound();
+                updateWindow();
+                long test = collisions.stream().filter(c -> c.getModel().isPassed()).count();
+                //System.out.println(test + "/" + collisions.size());
             }
         }, 17, 17);
 
@@ -103,6 +107,10 @@ public class CarModel {
         this.velocity = 0;
         //System.out.println(this.position);
     }
+    private void updateWindow(){
+        MoovingRaceWindow.positionTranslate.setLocation(-positionX + offSetX/2, -positionY + offSetY/2);
+        collisions.forEach(TrackTile::refreshBound);
+    }
     private void updatePosition() {
         this.positionX += this.velocity * Math.cos(Math.toRadians(getRotation()));
         this.positionY += this.velocity * Math.sin(Math.toRadians(getRotation()));
@@ -111,17 +119,23 @@ public class CarModel {
 
     private boolean checkCollision() {
         for (TrackTile collision : collisions) {
-
             if(!collision.getBounds().intersects(car.getBounds())) continue;
+            collision.getModel().setPassed(true);
             Point position = new Point(Math.round(positionX), Math.round(positionY));
-            position.translate(-collision.getModel().getPosition().x + 13, -collision.getModel().getPosition().y + 13);
+            //System.out.println(position + " : " +collision.getModel().getPosition());
+            position.translate(-collision.getModel().getPosition().x + 13,
+                    -collision.getModel().getPosition().y + 13);
+
            //position.translate((velocity > 0) ? 15 : 0, (rotation > 0) ? 15 : 0);
-            if(position.x < 0 || position.y < 0 || collision.getModel().getImage().getWidth(null) <= position.x || collision.getModel().getImage().getHeight(null) <= position.y){
+            //System.out.println("result : " + position);
+
+            if(position.x < 0 || position.y < 0 || collision.getModel().getImage().getWidth() <= position.x || collision.getModel().getImage().getHeight() <= position.y){
                 continue;
             }
             int rgb = collision.getModel().getImage().getRGB(position.x, position.y);
             int alpha = (rgb & 0xff000000) >>> 24;
             if(alpha != 0){
+                //System.out.println("in");
                 return false;
             }
         }
@@ -143,8 +157,16 @@ public class CarModel {
     }
     public void start(){
         for (Component component : context.getComponents()) {
-            if(component instanceof TrackTile)
+            if(component instanceof TrackTile) {
                 collisions.add(((TrackTile) component));
+                if(((TrackTile) component).getModel().getType() == TrackType.TRACK_START)
+                {
+                    this.positionX = ((TrackTile) component).getModel().getPosition().x + 32 - 13;
+                    this.positionY = ((TrackTile) component).getModel().getPosition().y + 32 - 13;
+                    //System.out.println(getPosition());
+
+                }
+            }
         }
     }
     public Image getSprite() {
@@ -159,6 +181,26 @@ public class CarModel {
         return new Point(Math.round(this.positionX), Math.round(this.positionY));
     }
 
+    public void setPositionX(float positionX) {
+        this.positionX = positionX;
+    }
+
+    public void setPositionY(float positionY) {
+        this.positionY = positionY;
+    }
+
+    public Point getOffSet() {
+        return new Point(Math.round(this.offSetX), Math.round(this.offSetY));
+    }
+
+    public void setOffSetX(float offSetX) {
+        this.offSetX = offSetX;
+    }
+
+    public void setOffSetY(float offSetY) {
+        this.offSetY = offSetY;
+    }
+
     private void impulse(float force) {
 
         velocity += force;
@@ -166,12 +208,12 @@ public class CarModel {
 
     private void rotateRight() {
 
-        rotation = rotation >= 359 ? 0 + velocity/2 + 2 : rotation + velocity/2 + 2;
+        rotation = rotation >= 359 ? 0 + Math.abs(velocity)/2 + 2 : rotation + Math.abs(velocity)/2 + 2;
     }
 
     private void rotateLeft() {
 
-        rotation = rotation <= 0 ? 360 - velocity/2 - 2 : rotation - velocity/2 - 2;
+        rotation = rotation <= 0 ? 360 - Math.abs(velocity)/2 - 2 : rotation - Math.abs(velocity)/2 - 2;
     }
 
     private void updateEvent() {

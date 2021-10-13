@@ -22,6 +22,8 @@ public class MoovingRaceWindow extends JFrame {
         super("MoovingRace");
         setPreferredSize(new Dimension(600, 400));
         setDefaultCloseOperation(EXIT_ON_CLOSE);
+        //setExtendedState(JFrame.MAXIMIZED_BOTH);
+        //setUndecorated(true);
 
         positionTranslate = new Point(0, 0);
         addKeyListener(new KeyAdapter() {
@@ -50,6 +52,7 @@ public class MoovingRaceWindow extends JFrame {
                 super.componentResized(e);
                 scale = (float) (Math.round(getHeight() * 64.0/200) / 64.0);
 
+                scale = 2f;
                 for (Component component : panel.getComponents()) {
                     if(component instanceof TrackTile){
                         ((TrackTile) component).refreshBound();

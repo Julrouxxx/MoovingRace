@@ -9,10 +9,12 @@ public class Car extends JComponent {
 
     public CarModel carModel;
     public CarUI ui;
+    public JPanel context;
     public Car(JPanel context) {
         setFocusable(true);
         this.carModel = new CarModel(this, context);
         this.ui = new CarUI();
+        this.context = context;
     }
 
     @Override
@@ -27,10 +29,13 @@ public class Car extends JComponent {
         return carModel;
     }
     public void refreshBound() {
-        setBounds(Math.round(((float) getModel().getPosition().getX())* MoovingRaceWindow.scale),
-                Math.round (((float) getModel().getPosition().getY())*MoovingRaceWindow.scale),
+        setBounds(context.getSize().width/2 - Math.round(MoovingRaceWindow.scale*25)/2,
+                context.getSize().height/2 - Math.round(MoovingRaceWindow.scale*25)/2,
                 Math.round(MoovingRaceWindow.scale*25),
                 Math.round(MoovingRaceWindow.scale*25));
+        carModel.setOffSetX(context.getSize().width/2.0f - Math.round(MoovingRaceWindow.scale*25)/2.0f);
+        carModel.setOffSetY(context.getSize().height/2.0f - Math.round(MoovingRaceWindow.scale*25)/2.0f);
+        //System.out.println(carModel.getPosition());
         repaint();
     }
 
