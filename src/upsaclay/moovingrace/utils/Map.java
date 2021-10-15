@@ -25,4 +25,11 @@ public class Map {
         return tracks;
     }
 
+
+    @Override
+    public String toString() {
+        return "Map{" +
+                "tracks=" + tracks +
+                '}';
+    }
 }

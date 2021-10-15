@@ -7,11 +7,19 @@ import java.awt.*;
 
 public class TrackTileModel {
 
+    private int id;
     private TrackType type;
     private TrackRotation rotation;
     private Point position;
 
     public TrackTileModel(TrackType type, TrackRotation rotation, Point position) {
+        this.type = type;
+        this.rotation = rotation;
+        this.position = position;
+    }
+
+    public TrackTileModel(int id, TrackType type, TrackRotation rotation, Point position) {
+        this.id = id;
         this.type = type;
         this.rotation = rotation;
         this.position = position;
@@ -35,5 +43,13 @@ public class TrackTileModel {
 
     public void setRotation(TrackRotation rotation) {
         this.rotation = rotation;
+    }
+
+    public int getId() {
+        return id;
+    }
+
+    public void incId() {
+        this.id++;
     }
 }

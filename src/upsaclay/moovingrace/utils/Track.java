@@ -4,7 +4,15 @@ public class Track {
     private TrackType type;
     private TrackRotation rotation;
     private int x, y;
+    public int id;
 
+    public Track(int id, TrackType type, TrackRotation rotation, int x, int y) {
+        this.id = id;
+        this.type = type;
+        this.rotation = rotation;
+        this.x = x;
+        this.y = y;
+    }
     public Track(TrackType type, TrackRotation rotation, int x, int y) {
         this.type = type;
         this.rotation = rotation;
@@ -27,4 +35,7 @@ public class Track {
         return y*scale;
     }
 
+    public int getId() {
+        return id;
+    }
 }

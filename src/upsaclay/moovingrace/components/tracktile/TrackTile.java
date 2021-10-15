@@ -27,6 +27,14 @@ public class TrackTile extends JComponent {
         this.ui = new TrackTileUI(this);
     }
 
+    public TrackTile(int id, TrackType type, TrackRotation rotation, int scale, Point position) {
+        InitSprites();
+
+        this.model = new TrackTileModel(id, type, rotation, position);
+
+        this.ui = new TrackTileUI(this);
+    }
+
     public TrackTileModel getModel() {
         return model;
     }
