@@ -1,5 +1,7 @@
 package upsaclay.moovingrace;
 
+import com.google.gson.Gson;
+import com.google.gson.GsonBuilder;
 import upsaclay.moovingrace.components.InfoText;
 import upsaclay.moovingrace.components.car.Car;
 import upsaclay.moovingrace.components.tracktile.TrackTile;
@@ -11,7 +13,8 @@ import java.awt.event.ComponentAdapter;
 import java.awt.event.ComponentEvent;
 import java.awt.event.KeyAdapter;
 import java.awt.event.KeyEvent;
-import java.util.ArrayList;
+import java.io.FileNotFoundException;
+import java.io.FileReader;
 
 public class MoovingRaceWindow extends JFrame {
 
@@ -73,23 +76,20 @@ public class MoovingRaceWindow extends JFrame {
         panel.setLayout(null);
         panel.setBackground(Color.green);
         add(panel, BorderLayout.CENTER);
-        //createGame();
+        GsonBuilder gsonBuilder = new GsonBuilder();
+        gsonBuilder.registerTypeAdapter(Map.class, new MapSerializer());
+        Gson gson = gsonBuilder.create();
+        try {
+            Map test = gson.fromJson(new FileReader(Main.getWorkingDirectory()+"/test.json"), Map.class);
+            MapManager.getInstance().getMaps().add(test);
+        } catch (FileNotFoundException e) {
+            e.printStackTrace();
+        }
+        createGame(MapManager.getInstance().getMapByName("test"));
         //createMapEditor("test");
 
         //Map map2 = createMapFromWindow("aa");
         //System.out.println(map2.getTracks().size());
-
-
-        Map map = MapManager.getInstance().getMapByName("complex");
-        Car car = new Car(panel,  map);
-
-        panel.add(car);
-        panel.add(new InfoText(car));
-        for (Track track : map.getTracks()) {
-            loadImage(track.getPositionX(map.getScale()), track.getPositionY(map.getScale()), track.getType(), track.getRotation(), map.getScale());
-        }
-
-        car.getModel().start();
         pack();
         repaint();
     }
@@ -132,21 +132,31 @@ public class MoovingRaceWindow extends JFrame {
         return map;
     }
 
-    public void createMapEditor(String mapName) {
+    public void createMenu(String mapName) {
         panel.removeAll();
+        panel.setLayout(new BoxLayout(panel, BoxLayout.PAGE_AXIS));
 
         MapEditor editor = new MapEditor(mapName, panel);
     }
 
-    public void createGame() {
+    public void createMapEditor(String mapName) {
         panel.removeAll();
+        panel.setLayout(null);
 
-        Car car = new Car();
+        MapEditor editor = new MapEditor(mapName, panel);
+    }
+
+    public void createGame(Map map) {
+        panel.removeAll();
+        panel.setLayout(null);
+
+        Car car = new Car(panel, map);
         panel.add(car);
+        panel.add(new InfoText(car));
 
-        Map map = MapManager.getInstance().getMapByName("complex");
         for (Track track : map.getTracks()) {
             loadImage(track.getPositionX(map.getScale()), track.getPositionY(map.getScale()), track.getType(), track.getRotation(), map.getScale());
         }
+        car.getModel().start();
     }
 }

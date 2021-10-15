@@ -28,7 +28,7 @@ public class Map {
     }
 
     public Optional<Integer> getMaxLap() {
-        return Optional.of(maxLap);
+        return isLoop() ? Optional.of(maxLap) : Optional.empty();
     }
 
     public String getName() {
@@ -49,5 +49,13 @@ public class Map {
         return "Map{" +
                 "tracks=" + tracks +
                 '}';
+    }
+
+    public void setMaxLaps(int maxLaps) {
+        this.maxLap = maxLaps;
+    }
+
+    public void setIsLoop(boolean loop) {
+        this.loop = loop;
     }
 }

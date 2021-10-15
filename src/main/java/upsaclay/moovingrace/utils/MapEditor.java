@@ -1,17 +1,22 @@
 package upsaclay.moovingrace.utils;
 
+import com.google.gson.Gson;
+import com.google.gson.GsonBuilder;
+import upsaclay.moovingrace.Main;
 import upsaclay.moovingrace.MoovingRaceWindow;
-import upsaclay.moovingrace.components.car.Car;
 import upsaclay.moovingrace.components.tracktile.TrackTile;
 import upsaclay.moovingrace.components.tracktile.TrackTileModel;
 
 import javax.swing.*;
 import java.awt.*;
-import java.awt.event.*;
-import java.nio.channels.spi.AbstractSelectionKey;
-import java.util.ArrayList;
-
-import static com.sun.java.accessibility.util.AWTEventMonitor.addComponentListener;
+import java.awt.event.ComponentAdapter;
+import java.awt.event.ComponentEvent;
+import java.awt.event.MouseAdapter;
+import java.awt.event.MouseEvent;
+import java.io.BufferedWriter;
+import java.io.File;
+import java.io.FileWriter;
+import java.io.IOException;
 
 public class MapEditor {
     public Map map;
@@ -222,7 +227,18 @@ public class MapEditor {
         }
         return true;
     }
+    private boolean hasEndTileAvailable() {
 
+        for (Component component : panel.getComponents()) {
+            if(component instanceof TrackTile){
+                TrackTile tile = ((TrackTile) component);
+                if(tile.getModel().getType() == TrackType.TRACK_END) {
+                    return true;
+                }
+            }
+        }
+        return false;
+    }
 
     private void matchToStart(TrackTile trackTileButton) {
 
@@ -413,8 +429,33 @@ public class MapEditor {
 
 
     private void endTrack() {
-        map = createMapFromWindow("test");
-        System.out.println(map);
+
+        map = createMapFromWindow(map.getName());
+        if(!hasEndTileAvailable()) {
+            JSpinner jSpinner = new JSpinner(new SpinnerNumberModel(3, 1, 15, 1));
+            JOptionPane.showConfirmDialog(null, jSpinner, "How Many Laps?", JOptionPane.OK_CANCEL_OPTION, JOptionPane.INFORMATION_MESSAGE);
+
+            map.setIsLoop(true);
+            map.setMaxLaps(((int) jSpinner.getValue()));
+        }
+        GsonBuilder gsonBuilder = new GsonBuilder();
+        gsonBuilder.registerTypeAdapter(Map.class, new MapSerializer());
+        Gson gson = gsonBuilder.create();
+        String workingDirectory = Main.getWorkingDirectory();
+        File file = new File(workingDirectory);
+        file.mkdirs();
+        file = new File(workingDirectory+map.getName()+".json");
+        String s = gson.toJson(map);
+        BufferedWriter fileWriter;
+        try {
+            fileWriter = new BufferedWriter(new FileWriter(file));
+            fileWriter.write(s);
+            fileWriter.flush();
+            fileWriter.close();
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
+        System.out.println("Saved in " + file.getAbsolutePath());
     }
 
     private void refreshAllBounds() {
