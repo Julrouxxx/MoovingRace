@@ -6,6 +6,15 @@ public class Main {
 
 
     public static void main(String[] args) {
+        Map simpleMax = new Map("simple", 64);
+        simpleMax.getTracks().add(new Track(TrackType.TRACK_SHIFT, TrackRotation.NORTH, 0, 0));
+        simpleMax.getTracks().add(new Track(TrackType.TRACK_START, TrackRotation.EAST, 1, 0));
+        simpleMax.getTracks().add(new Track(TrackType.TRACK_SHIFT, TrackRotation.WEST, 2, 0));
+        simpleMax.getTracks().add(new Track(TrackType.TRACK_SHIFT, TrackRotation.SOUTH, 2, 1));
+        simpleMax.getTracks().add(new Track(TrackType.TRACK_CLASSIC, TrackRotation.EAST, 1, 1));
+        simpleMax.getTracks().add(new Track(TrackType.TRACK_SHIFT, TrackRotation.EAST, 0, 1));
+
+        MapManager.getInstance().getMaps().add(simpleMax);
         Map complexMap = new Map("complex", 64);
         complexMap.getTracks().add(new Track(TrackType.TRACK_START, TrackRotation.EAST, 1,0));
         complexMap.getTracks().add(new Track(TrackType.TRACK_CLASSIC, TrackRotation.EAST, 2,0));

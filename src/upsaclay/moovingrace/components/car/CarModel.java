@@ -6,6 +6,8 @@ import upsaclay.moovingrace.utils.TrackType;
 
 import javax.imageio.ImageIO;
 import javax.swing.*;
+import javax.swing.event.ChangeEvent;
+import javax.swing.event.ChangeListener;
 import java.awt.*;
 import java.awt.event.KeyAdapter;
 import java.awt.event.KeyEvent;
@@ -17,17 +19,22 @@ import java.util.*;
 public class CarModel {
 
     private Image sprite;
-
+    private ArrayList<ChangeListener> changeListeners = new ArrayList<>();
     private final float DECELERATION = 0.98f;
     private float positionX;
     private float positionY;
     private float offSetX;
     private float offSetY;
+    private TrackTile currentTile;
+    private int lap;
+    private Date startDate;
+    private boolean loop = true;
     private float velocity;
     private Car car;
+    private boolean isStarted;
     private JPanel context;
     private float rotation;
-    private List<TrackTile> collisions;
+    private final List<TrackTile> tiles;
     private boolean isCollided = false;
     private boolean isUp = false;
     private boolean isDown = false;
@@ -39,12 +46,19 @@ public class CarModel {
         this.velocity = 0;
         this.rotation = 0;
         this.car = car;
-        this.collisions = new ArrayList<>();
+        this.tiles = new ArrayList<>();
         this.context = context;
 
         new Timer().schedule(new TimerTask() {
             @Override
             public void run() {
+                triggerListeners();
+                if(!isStarted) {
+                    updateWindow();
+
+                    checkCountdown();
+                    return;
+                }
                 updateEvent();
                 updatePosition();
                 updateVelocity();
@@ -54,8 +68,7 @@ public class CarModel {
                 reversePosition();
                 car.refreshBound();
                 updateWindow();
-                long test = collisions.stream().filter(c -> c.getModel().isPassed()).count();
-                //System.out.println(test + "/" + collisions.size());
+                countLap();
             }
         }, 17, 17);
 
@@ -91,11 +104,23 @@ public class CarModel {
         });
     }
 
+    public ArrayList<ChangeListener> getChangeListeners() {
+        return changeListeners;
+    }
+
     private void reverseVelocity() {
         if(!isCollided){
             return;
         }
         this.velocity = this.velocity / DECELERATION;
+    }
+
+    public boolean isLoop() {
+        return loop;
+    }
+
+    public JPanel getContext() {
+        return context;
     }
 
     private void reversePosition() {
@@ -109,7 +134,7 @@ public class CarModel {
     }
     private void updateWindow(){
         MoovingRaceWindow.positionTranslate.setLocation(-positionX + offSetX/2, -positionY + offSetY/2);
-        collisions.forEach(TrackTile::refreshBound);
+        tiles.forEach(TrackTile::refreshBound);
     }
     private void updatePosition() {
         this.positionX += this.velocity * Math.cos(Math.toRadians(getRotation()));
@@ -117,16 +142,21 @@ public class CarModel {
         //System.out.println(this.position);
     }
 
+    public boolean isStarted() {
+        return isStarted;
+    }
+
     private boolean checkCollision() {
-        for (TrackTile collision : collisions) {
+        for (TrackTile collision : tiles) {
             if(!collision.getBounds().intersects(car.getBounds())) continue;
+            currentTile = collision;
             collision.getModel().setPassed(true);
             Point position = new Point(Math.round(positionX), Math.round(positionY));
             //System.out.println(position + " : " +collision.getModel().getPosition());
             position.translate(-collision.getModel().getPosition().x + 13,
                     -collision.getModel().getPosition().y + 13);
 
-           //position.translate((velocity > 0) ? 15 : 0, (rotation > 0) ? 15 : 0);
+            //position.translate((velocity > 0) ? 15 : 0, (rotation > 0) ? 15 : 0);
             //System.out.println("result : " + position);
 
             if(position.x < 0 || position.y < 0 || collision.getModel().getImage().getWidth() <= position.x || collision.getModel().getImage().getHeight() <= position.y){
@@ -156,9 +186,10 @@ public class CarModel {
         }
     }
     public void start(){
+
         for (Component component : context.getComponents()) {
             if(component instanceof TrackTile) {
-                collisions.add(((TrackTile) component));
+                tiles.add(((TrackTile) component));
                 if(((TrackTile) component).getModel().getType() == TrackType.TRACK_START)
                 {
                     this.positionX = ((TrackTile) component).getModel().getPosition().x + 32 - 13;
@@ -166,8 +197,18 @@ public class CarModel {
                     //System.out.println(getPosition());
 
                 }
+                if(((TrackTile) component).getModel().getType() == TrackType.TRACK_END)
+                    loop = false;
             }
         }
+        startCountdown();
+
+    }
+
+    private void startCountdown(){
+        Calendar calendar = Calendar.getInstance();
+        calendar.add(Calendar.SECOND, 5);
+        startDate = calendar.getTime();
     }
     public Image getSprite() {
         return sprite;
@@ -232,5 +273,30 @@ public class CarModel {
         if(isDown) {
             impulse(-0.1f);
         }
+    }
+
+    public int getLap() {
+        return lap;
+    }
+
+    private void countLap(){
+        if(!loop) return;
+        long test = tiles.stream().filter(c -> c.getModel().isPassed()).count();
+        if(test < tiles.size()) return;
+        if(currentTile.getModel().getType() != TrackType.TRACK_START) return;
+        tiles.forEach(c -> c.getModel().setPassed(false));
+        lap++;
+    }
+    private void checkCountdown(){
+        if(startDate == null) return;
+        if(startDate.before(new Date()))
+            isStarted = true;
+    }
+    private void triggerListeners(){
+        changeListeners.forEach(c -> c.stateChanged(new ChangeEvent(this)));
+    }
+
+    public Date getStartDate() {
+        return startDate;
     }
 }

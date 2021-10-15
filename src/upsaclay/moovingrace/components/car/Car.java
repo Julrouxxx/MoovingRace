@@ -3,6 +3,7 @@ package upsaclay.moovingrace.components.car;
 import upsaclay.moovingrace.MoovingRaceWindow;
 
 import javax.swing.*;
+import javax.swing.event.ChangeListener;
 import java.awt.*;
 
 public class Car extends JComponent {
@@ -38,7 +39,9 @@ public class Car extends JComponent {
         //System.out.println(carModel.getPosition());
         repaint();
     }
-
+    public void addChangeListener(ChangeListener changeListener){
+        getModel().getChangeListeners().add(changeListener);
+    }
     public Dimension getMinimumSize() { return getPreferredSize(); }
     public Dimension getPreferredSize() {
         return new Dimension(23, 23);

@@ -1,5 +1,6 @@
 package upsaclay.moovingrace;
 
+import upsaclay.moovingrace.components.InfoText;
 import upsaclay.moovingrace.components.car.Car;
 import upsaclay.moovingrace.components.tracktile.TrackTile;
 import upsaclay.moovingrace.utils.*;
@@ -50,7 +51,6 @@ public class MoovingRaceWindow extends JFrame {
             @Override
             public void componentResized(ComponentEvent e) {
                 super.componentResized(e);
-                scale = (float) (Math.round(getHeight() * 64.0/200) / 64.0);
 
                 scale = 2f;
                 for (Component component : panel.getComponents()) {
@@ -58,18 +58,19 @@ public class MoovingRaceWindow extends JFrame {
                         ((TrackTile) component).refreshBound();
                     } else if(component instanceof Car){
                         ((Car) component).refreshBound();
+                    }else if(component instanceof InfoText){
+                        ((InfoText) component).refreshBound();
                     }
                 }
             }
         });
         Car car = new Car(panel);
         panel.add(car);
+        panel.add(new InfoText(car));
         Map map = MapManager.getInstance().getMapByName("complex");
         for (Track track : map.getTracks()) {
             loadImage(track.getPositionX(map.getScale()), track.getPositionY(map.getScale()), track.getType(), track.getRotation(), map.getScale());
         }
-
-
 
         car.getModel().start();
         pack();
