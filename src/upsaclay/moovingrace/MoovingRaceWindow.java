@@ -64,10 +64,11 @@ public class MoovingRaceWindow extends JFrame {
                 }
             }
         });
-        Car car = new Car(panel);
+        Map map = MapManager.getInstance().getMapByName("complex");
+        Car car = new Car(panel,  map);
+
         panel.add(car);
         panel.add(new InfoText(car));
-        Map map = MapManager.getInstance().getMapByName("complex");
         for (Track track : map.getTracks()) {
             loadImage(track.getPositionX(map.getScale()), track.getPositionY(map.getScale()), track.getType(), track.getRotation(), map.getScale());
         }

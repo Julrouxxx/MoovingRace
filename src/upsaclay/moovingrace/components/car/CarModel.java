@@ -2,6 +2,7 @@ package upsaclay.moovingrace.components.car;
 
 import upsaclay.moovingrace.MoovingRaceWindow;
 import upsaclay.moovingrace.components.tracktile.TrackTile;
+import upsaclay.moovingrace.utils.Map;
 import upsaclay.moovingrace.utils.TrackType;
 
 import javax.imageio.ImageIO;
@@ -26,13 +27,15 @@ public class CarModel {
     private float offSetX;
     private float offSetY;
     private TrackTile currentTile;
-    private int lap;
+    private int lap = 1;
     private Date startDate;
+    private Date endDate;
     private boolean loop = true;
     private float velocity;
     private Car car;
     private boolean isStarted;
     private JPanel context;
+    private boolean hasEnded;
     private float rotation;
     private final List<TrackTile> tiles;
     private boolean isCollided = false;
@@ -40,11 +43,13 @@ public class CarModel {
     private boolean isDown = false;
     private boolean isRight = false;
     private boolean isLeft = false;
-
-    public CarModel(Car car, JPanel context) {
+    private Map map;
+    public CarModel(Car car, JPanel context, Map map) {
         loadImage();
         this.velocity = 0;
         this.rotation = 0;
+        this.map = map;
+        this.loop = map.isLoop();
         this.car = car;
         this.tiles = new ArrayList<>();
         this.context = context;
@@ -59,7 +64,8 @@ public class CarModel {
                     checkCountdown();
                     return;
                 }
-                updateEvent();
+                if(!hasEnded)
+                    updateEvent();
                 updatePosition();
                 updateVelocity();
                 car.refreshBound();
@@ -197,8 +203,6 @@ public class CarModel {
                     //System.out.println(getPosition());
 
                 }
-                if(((TrackTile) component).getModel().getType() == TrackType.TRACK_END)
-                    loop = false;
             }
         }
         startCountdown();
@@ -286,6 +290,11 @@ public class CarModel {
         if(currentTile.getModel().getType() != TrackType.TRACK_START) return;
         tiles.forEach(c -> c.getModel().setPassed(false));
         lap++;
+        if(lap >= map.getMaxLap().orElse(0)){
+            //FINISHED
+            hasEnded = true;
+            endDate = new Date();
+        }
     }
     private void checkCountdown(){
         if(startDate == null) return;
@@ -298,5 +307,17 @@ public class CarModel {
 
     public Date getStartDate() {
         return startDate;
+    }
+
+    public Map getMap() {
+        return map;
+    }
+
+    public Date getEndDate() {
+        return endDate;
+    }
+
+    public boolean hasEnded() {
+        return hasEnded;
     }
 }

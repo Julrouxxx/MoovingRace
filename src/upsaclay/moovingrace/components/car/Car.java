@@ -1,6 +1,7 @@
 package upsaclay.moovingrace.components.car;
 
 import upsaclay.moovingrace.MoovingRaceWindow;
+import upsaclay.moovingrace.utils.Map;
 
 import javax.swing.*;
 import javax.swing.event.ChangeListener;
@@ -11,9 +12,9 @@ public class Car extends JComponent {
     public CarModel carModel;
     public CarUI ui;
     public JPanel context;
-    public Car(JPanel context) {
+    public Car(JPanel context, Map map) {
         setFocusable(true);
-        this.carModel = new CarModel(this, context);
+        this.carModel = new CarModel(this, context, map);
         this.ui = new CarUI();
         this.context = context;
     }

@@ -26,13 +26,12 @@ public class InfoTextUI {
     public void paint(Graphics2D g, CarModel model){
         int xWindow = model.getContext().getBounds().width;
         int yWindow = model.getContext().getBounds().height;
-        System.out.println(xWindow);
         g.setPaint(Color.BLACK);
         g.setFont(font);
         if(model.isLoop())
-            g.drawString("Lap: " + model.getLap(), 100, 50);
+            g.drawString("Lap: " + model.getLap() + "/"+model.getMap().getMaxLap().orElse(0), 100, 50);
 
-        long milis = new Date().getTime() - model.getStartDate().getTime();
+        long milis = (model.hasEnded() ? model.getEndDate().getTime() : new Date().getTime()) - model.getStartDate().getTime();
         long m = milis%1000;
         long s = (milis - m) / 1000;
         if(model.isStarted())
