@@ -11,6 +11,7 @@ import java.awt.image.BufferedImage;
 public class TrackTileModel {
     BufferedImage image;
 
+    private int id;
     private TrackType type;
     private TrackRotation rotation;
     private boolean isPassed;
@@ -32,6 +33,13 @@ public class TrackTileModel {
         return image;
     }
 
+    public TrackTileModel(int id, TrackType type, TrackRotation rotation, Point position) {
+        this.id = id;
+        this.type = type;
+        this.rotation = rotation;
+        this.position = position;
+    }
+
     public TrackType getType() {
         return type;
     }
@@ -50,5 +58,21 @@ public class TrackTileModel {
 
     public Point getPosition() {
         return position;
+    }
+
+    public void setType(TrackType type) {
+        this.type = type;
+    }
+
+    public void setRotation(TrackRotation rotation) {
+        this.rotation = rotation;
+    }
+
+    public int getId() {
+        return id;
+    }
+
+    public void incId() {
+        this.id++;
     }
 }

@@ -27,6 +27,14 @@ public class TrackTile extends JComponent {
         this.ui = new TrackTileUI(this);
     }
 
+    public TrackTile(int id, TrackType type, TrackRotation rotation, int scale, Point position) {
+        InitSprites();
+
+        this.model = new TrackTileModel(id, type, rotation, position);
+
+        this.ui = new TrackTileUI(this);
+    }
+
     public TrackTileModel getModel() {
         return model;
     }
@@ -63,6 +71,8 @@ public class TrackTile extends JComponent {
     }
     public Dimension getMaximumSize() { return getPreferredSize(); }
 
+
+
     public void InitSprites()
     {
         if(sprites != null && !sprites.isEmpty()) return;
@@ -91,6 +101,9 @@ public class TrackTile extends JComponent {
                     break;
                 case TRACK_END:
                     sprites.put(TrackType.TRACK_END, spriteSheets.getSubimage(0, 0, 64, 64));
+                    break;
+                case TRACK_BUTTON:
+                    sprites.put(TrackType.TRACK_BUTTON, spriteSheets.getSubimage(64, 64, 64, 64));
                     break;
             }
         }

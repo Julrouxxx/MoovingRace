@@ -42,4 +42,12 @@ public class Map {
     public ArrayList<Track> getTracks() {
         return tracks;
     }
+
+
+    @Override
+    public String toString() {
+        return "Map{" +
+                "tracks=" + tracks +
+                '}';
+    }
 }
