@@ -1,5 +1,6 @@
 package upsaclay.moovingrace;
 
+import upsaclay.moovingrace.components.InfoText;
 import upsaclay.moovingrace.components.car.Car;
 import upsaclay.moovingrace.components.tracktile.TrackTile;
 import upsaclay.moovingrace.utils.*;
@@ -23,8 +24,10 @@ public class MoovingRaceWindow extends JFrame {
         super("MoovingRace");
         setPreferredSize(new Dimension(600, 400));
         setDefaultCloseOperation(EXIT_ON_CLOSE);
+        //setExtendedState(JFrame.MAXIMIZED_BOTH);
+        //setUndecorated(true);
 
-        positionTranslate = new Point(-64*8, -64*9);
+        positionTranslate = new Point(0, 0);
         addKeyListener(new KeyAdapter() {
             @Override
             public void keyPressed(KeyEvent e) {
@@ -51,28 +54,42 @@ public class MoovingRaceWindow extends JFrame {
             @Override
             public void componentResized(ComponentEvent e) {
                 super.componentResized(e);
-                scale = 2;
 
+                scale = 2f;
                 for (Component component : panel.getComponents()) {
                     if(component instanceof TrackTile){
                         ((TrackTile) component).refreshBound();
                     } else if(component instanceof Car){
                         ((Car) component).refreshBound();
+                    }else if(component instanceof InfoText){
+                        ((InfoText) component).refreshBound();
                     }
                 }
             }
         });
+
 
         panel = new JPanel();
         panel.setLayout(null);
         panel.setBackground(Color.green);
         add(panel, BorderLayout.CENTER);
         //createGame();
-        createMapEditor("test");
+        //createMapEditor("test");
 
         //Map map2 = createMapFromWindow("aa");
         //System.out.println(map2.getTracks().size());
 
+
+        Map map = MapManager.getInstance().getMapByName("complex");
+        Car car = new Car(panel,  map);
+
+        panel.add(car);
+        panel.add(new InfoText(car));
+        for (Track track : map.getTracks()) {
+            loadImage(track.getPositionX(map.getScale()), track.getPositionY(map.getScale()), track.getType(), track.getRotation(), map.getScale());
+        }
+
+        car.getModel().start();
         pack();
         repaint();
     }

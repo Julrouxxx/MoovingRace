@@ -4,7 +4,6 @@ import upsaclay.moovingrace.MoovingRaceWindow;
 
 import java.awt.*;
 import java.awt.geom.AffineTransform;
-import java.awt.image.BufferedImage;
 
 public class CarUI {
 
@@ -24,6 +23,5 @@ public class CarUI {
         //g.setColor(Color.black);
         //g.fillRect(0, 0, car.getBounds().width, car.getBounds().height);
         g.drawImage(sprite, rotation, null);
-
     }
 }
