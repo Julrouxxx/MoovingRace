@@ -135,7 +135,7 @@ public class MoovingRaceWindow extends JFrame {
         editorButton.addActionListener(e ->{
             JTextField mapNameField = new JTextField();
             int c = JOptionPane.showConfirmDialog(panel, mapNameField, "Choose map name", JOptionPane.OK_CANCEL_OPTION, JOptionPane.QUESTION_MESSAGE, getDialogIcon());
-            if(c != 0) return;
+            if (c != 0 || mapNameField.getText().isBlank()) return;
             createMapEditor(mapNameField.getText());
         });
         editorButton.setAlignmentX(Component.CENTER_ALIGNMENT);
