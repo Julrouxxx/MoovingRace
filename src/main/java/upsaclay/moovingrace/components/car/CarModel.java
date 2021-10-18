@@ -306,12 +306,13 @@ public class CarModel {
         }
         if(currentTile.getModel().getType() != TrackType.TRACK_START) return;
         tiles.forEach(c -> c.getModel().setPassed(false));
-        lap++;
         if(lap >= map.getMaxLap().orElse(0)){
             //FINISHED
             hasEnded = true;
             endDate = new Date();
+            return;
         }
+        lap++;
     }
     private void checkCountdown(){
         if(startDate == null) return;
