@@ -12,6 +12,7 @@ import java.awt.event.ComponentAdapter;
 import java.awt.event.ComponentEvent;
 import java.awt.event.KeyAdapter;
 import java.awt.event.KeyEvent;
+import java.io.IOException;
 import java.util.Objects;
 
 public class MoovingRaceWindow extends JFrame {
@@ -151,7 +152,12 @@ public class MoovingRaceWindow extends JFrame {
     }
 
     public ImageIcon getDialogIcon() {
-        return new ImageIcon(Objects.requireNonNull(getClass().getResource("/Sprites/car_sprite.png")));
+        try {
+            return new ImageIcon(Objects.requireNonNull(getClass().getResourceAsStream("/Sprites/car_sprite.png")).readAllBytes());
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
+        return null;
     }
 
     public void createMapEditor(String mapName) {

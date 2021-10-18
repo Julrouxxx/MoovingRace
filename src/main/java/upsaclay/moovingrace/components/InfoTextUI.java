@@ -3,9 +3,7 @@ package upsaclay.moovingrace.components;
 import upsaclay.moovingrace.components.car.CarModel;
 
 import java.awt.*;
-import java.io.File;
 import java.io.IOException;
-import java.net.URISyntaxException;
 import java.util.Date;
 import java.util.Objects;
 
@@ -16,8 +14,9 @@ public class InfoTextUI {
         GraphicsEnvironment ge =
                 GraphicsEnvironment.getLocalGraphicsEnvironment();
         try {
-            ge.registerFont(Font.createFont(Font.TRUETYPE_FONT, new File(Objects.requireNonNull(getClass().getResource("/Minecraft.ttf")).toURI())));
-        } catch (FontFormatException | IOException | URISyntaxException e) {
+
+            ge.registerFont(Font.createFont(Font.TRUETYPE_FONT, (Objects.requireNonNull(getClass().getResourceAsStream("/Minecraft.ttf")))));
+        } catch (FontFormatException | IOException e) {
             e.printStackTrace();
         }
         font = new Font("Minecraft", Font.PLAIN, 32);

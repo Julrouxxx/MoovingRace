@@ -82,7 +82,7 @@ public class TrackTile extends JComponent {
         for (TrackType type : TrackType.values()) {
             BufferedImage spriteSheets = null;
             try {
-                spriteSheets = ImageIO.read(Objects.requireNonNull(getClass().getResource("/Sprites/track_sprites.png")));
+                spriteSheets = ImageIO.read(Objects.requireNonNull(getClass().getResourceAsStream("/Sprites/track_sprites.png")));
             } catch (IOException e) {
                 e.printStackTrace();
             }

@@ -197,7 +197,7 @@ public class CarModel {
 
     private void loadImage() {
         try {
-            sprite = ImageIO.read(Objects.requireNonNull(getClass().getResource("/Sprites/car_sprite.png")));
+            sprite = ImageIO.read(Objects.requireNonNull(getClass().getResourceAsStream("/Sprites/car_sprite.png")));
         } catch (IOException e) {
             e.printStackTrace();
         }
