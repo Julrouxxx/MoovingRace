@@ -1,9 +1,8 @@
 package upsaclay.moovingrace;
 
-import com.google.gson.Gson;
-import com.google.gson.GsonBuilder;
 import upsaclay.moovingrace.components.InfoText;
 import upsaclay.moovingrace.components.car.Car;
+import upsaclay.moovingrace.components.car.CarModel;
 import upsaclay.moovingrace.components.tracktile.TrackTile;
 import upsaclay.moovingrace.utils.*;
 
@@ -13,8 +12,7 @@ import java.awt.event.ComponentAdapter;
 import java.awt.event.ComponentEvent;
 import java.awt.event.KeyAdapter;
 import java.awt.event.KeyEvent;
-import java.io.FileNotFoundException;
-import java.io.FileReader;
+import java.util.Objects;
 
 public class MoovingRaceWindow extends JFrame {
 
@@ -26,6 +24,7 @@ public class MoovingRaceWindow extends JFrame {
 
         super("MoovingRace");
         setPreferredSize(new Dimension(600, 400));
+        setMinimumSize(new Dimension(400, 300));
         setDefaultCloseOperation(EXIT_ON_CLOSE);
         //setExtendedState(JFrame.MAXIMIZED_BOTH);
         //setUndecorated(true);
@@ -59,16 +58,10 @@ public class MoovingRaceWindow extends JFrame {
                 super.componentResized(e);
 
                 scale = 2f;
-                for (Component component : panel.getComponents()) {
-                    if(component instanceof TrackTile){
-                        ((TrackTile) component).refreshBound();
-                    } else if(component instanceof Car){
-                        ((Car) component).refreshBound();
-                    }else if(component instanceof InfoText){
-                        ((InfoText) component).refreshBound();
-                    }
-                }
+                refreshAllBounds();
             }
+
+
         });
 
 
@@ -76,7 +69,8 @@ public class MoovingRaceWindow extends JFrame {
         panel.setLayout(null);
         panel.setBackground(Color.green);
         add(panel, BorderLayout.CENTER);
-        GsonBuilder gsonBuilder = new GsonBuilder();
+        createMenu();
+/*        GsonBuilder gsonBuilder = new GsonBuilder();
         gsonBuilder.registerTypeAdapter(Map.class, new MapSerializer());
         Gson gson = gsonBuilder.create();
         try {
@@ -85,7 +79,7 @@ public class MoovingRaceWindow extends JFrame {
         } catch (FileNotFoundException e) {
             e.printStackTrace();
         }
-        createGame(MapManager.getInstance().getMapByName("test"));
+        createGame(MapManager.getInstance().getMapByName("test"));*/
         //createMapEditor("test");
 
         //Map map2 = createMapFromWindow("aa");
@@ -94,7 +88,9 @@ public class MoovingRaceWindow extends JFrame {
         repaint();
     }
 
-
+    public JPanel getPanel() {
+        return panel;
+    }
 
     private void loadImage(int x, int y, TrackType type, TrackRotation rotation, int scale) {
 
@@ -108,48 +104,65 @@ public class MoovingRaceWindow extends JFrame {
     private void refreshAllBounds() {
         for (Component component : panel.getComponents()) {
             if(component instanceof TrackTile){
-                TrackTile tile = ((TrackTile) component);
-                tile.refreshBound();
+                ((TrackTile) component).refreshBound();
+            } else if(component instanceof Car){
+                ((Car) component).refreshBound();
+            }else if(component instanceof InfoText){
+                ((InfoText) component).refreshBound();
             }
         }
     }
 
-    private Map createMapFromWindow(String mapName) {
 
-        Map map = new Map(mapName, 64);
-        for (Component component : panel.getComponents()) {
-            if(component instanceof TrackTile){
-                TrackTile tile = ((TrackTile) component);
-
-                Track track = new Track(tile.getModel().getType(),
-                        tile.getModel().getRotation(),
-                        tile.getModel().getPosition().x,
-                        tile.getModel().getPosition().y);
-
-                map.getTracks().add(track);
-            }
-        }
-        return map;
-    }
-
-    public void createMenu(String mapName) {
+    public void createMenu() {
         panel.removeAll();
-        panel.setLayout(new BoxLayout(panel, BoxLayout.PAGE_AXIS));
+        panel.setLayout(new BoxLayout(panel, BoxLayout.Y_AXIS));
+        panel.add(Box.createVerticalGlue());
+        JButton playButton = new JButton("Play!");
+        playButton.addActionListener(e -> {
+            JComboBox<String> mapList = new JComboBox<>(MapManager.getInstance().getMapList());
 
-        MapEditor editor = new MapEditor(mapName, panel);
+            int c = JOptionPane.showConfirmDialog(panel, mapList, "Choose map", JOptionPane.OK_CANCEL_OPTION, JOptionPane.QUESTION_MESSAGE, getDialogIcon());
+            if(c != 0) return;
+            createGame(MapManager.getInstance().getMapByName(((String) mapList.getSelectedItem())));
+
+        });
+        playButton.setAlignmentX(Component.CENTER_ALIGNMENT);
+
+        panel.add(playButton);
+
+        JButton editorButton = new JButton("Map Editor");
+        editorButton.addActionListener(e ->{
+            JTextField mapNameField = new JTextField();
+            int c = JOptionPane.showConfirmDialog(panel, mapNameField, "Choose map name", JOptionPane.OK_CANCEL_OPTION, JOptionPane.QUESTION_MESSAGE, getDialogIcon());
+            if(c != 0) return;
+            createMapEditor(mapNameField.getText());
+        });
+        editorButton.setAlignmentX(Component.CENTER_ALIGNMENT);
+
+        panel.add(editorButton);
+        JButton quitButton = new JButton("Quit");
+        quitButton.addActionListener(e -> dispose());
+        quitButton.setAlignmentX(Component.CENTER_ALIGNMENT);
+        panel.add(quitButton);
+        panel.add(Box.createVerticalGlue());
+        panel.repaint();
+        panel.validate();
+    }
+
+    public ImageIcon getDialogIcon() {
+        return new ImageIcon(Objects.requireNonNull(getClass().getResource("/Sprites/car_sprite.png")));
     }
 
     public void createMapEditor(String mapName) {
         panel.removeAll();
         panel.setLayout(null);
-
-        MapEditor editor = new MapEditor(mapName, panel);
+        new MapEditor(mapName, this);
     }
 
     public void createGame(Map map) {
         panel.removeAll();
         panel.setLayout(null);
-
         Car car = new Car(panel, map);
         panel.add(car);
         panel.add(new InfoText(car));
@@ -157,6 +170,13 @@ public class MoovingRaceWindow extends JFrame {
         for (Track track : map.getTracks()) {
             loadImage(track.getPositionX(map.getScale()), track.getPositionY(map.getScale()), track.getType(), track.getRotation(), map.getScale());
         }
+        car.addChangeListener(e -> {
+            if (((CarModel) e.getSource()).isEndRequested()) {
+                ((CarModel) e.getSource()).end();
+                createMenu();
+            }});
         car.getModel().start();
+        refreshAllBounds();
+        car.requestFocusInWindow();
     }
 }

@@ -17,20 +17,22 @@ import java.io.BufferedWriter;
 import java.io.File;
 import java.io.FileWriter;
 import java.io.IOException;
+import java.util.Timer;
+import java.util.TimerTask;
 
 public class MapEditor {
     public Map map;
     public JPanel panel;
+    private MoovingRaceWindow moovingRaceWindow;
     private ComponentAdapter centerTile;
 
-    public MapEditor(String mapName, JPanel panel) {
-
-        this.panel = panel;
+    public MapEditor(String mapName, MoovingRaceWindow moovingRaceWindow) {
+        this.moovingRaceWindow = moovingRaceWindow;
+        this.panel = moovingRaceWindow.getPanel();
         this.map = new Map(mapName, 64);
         Track track = new Track(0, TrackType.TRACK_START, TrackRotation.EAST, 10, 10);
         map.getTracks().add(track);
         TrackTile trackTile_start = loadImage(track, map.getScale());
-        updateOnResize(trackTile_start);
 
         Track track_button1 = new Track(track.getId(), TrackType.TRACK_BUTTON, TrackRotation.EAST, 11, 10);
         map.getTracks().add(track_button1);
@@ -44,7 +46,7 @@ public class MapEditor {
         Track track_button4 = new Track(track.getId(), TrackType.TRACK_BUTTON, TrackRotation.NORTH, 10, 9);
         map.getTracks().add(track_button4);
         loadButton(track_button4, map.getScale(), trackTile_start);
-
+        updateOnResize(trackTile_start);
     }
 
     private TrackTile loadImage(Track track, int scale) {
@@ -53,7 +55,6 @@ public class MapEditor {
         trackTile.refreshBound();
 
         panel.add(trackTile);
-
         return trackTile;
     }
 
@@ -72,9 +73,9 @@ public class MapEditor {
                         case TRACK_START:
                             if(track.getPositionX(1) != (int) model.getPosition().getX()/scale) {
                                 if(track.getPositionX(1) < (int) model.getPosition().getX()/scale) {
-                                    model.setRotation(TrackRotation.WEST);
-                                } else {
                                     model.setRotation(TrackRotation.EAST);
+                                } else {
+                                    model.setRotation(TrackRotation.WEST);
                                 }
                             } else {
                                 if(track.getPositionY(1) < (int) model.getPosition().getY()/scale) {
@@ -114,12 +115,12 @@ public class MapEditor {
             }
         });
         panel.add(trackTile);
-
     }
 
     private void matchShift(TrackTileModel model, Track track, int scale) {
         if(track.getPositionX(1) != (int) model.getPosition().getX()/ scale) {
             if(track.getPositionX(1) < (int) model.getPosition().getX()/ scale) {
+
                 switch (model.getRotation()) {
                     case NORTH:
                         model.setType(TrackType.TRACK_SHIFT);
@@ -246,7 +247,7 @@ public class MapEditor {
             if(component instanceof TrackTile){
                 TrackTile tile = ((TrackTile) component);
                 if(tile.getModel().getType() == TrackType.TRACK_START) {
-                    if(tile.getModel().getRotation() == TrackRotation.EAST){
+                    if(tile.getModel().getRotation() == TrackRotation.WEST){
                         if(tile.getModel().getPosition().x/64 - 1 == trackTileButton.getModel().getPosition().x/64 &&
                                 tile.getModel().getPosition().y/64 == trackTileButton.getModel().getPosition().y/64) {
                             //WEST
@@ -264,7 +265,7 @@ public class MapEditor {
                             endTrack();
                         }
                     }
-                    if(tile.getModel().getRotation() == TrackRotation.WEST){
+                    if(tile.getModel().getRotation() == TrackRotation.EAST){
                         if(tile.getModel().getPosition().x/64 + 1 == trackTileButton.getModel().getPosition().x/64 &&
                                 tile.getModel().getPosition().y/64 == trackTileButton.getModel().getPosition().y/64) {
                             //EAST
@@ -395,6 +396,7 @@ public class MapEditor {
 
 
         panel.removeComponentListener(centerTile);
+        MoovingRaceWindow.positionTranslate.setLocation(-trackTileParent.getModel().getPosition().x + panel.getWidth()/2/2 - 64/2, -trackTileParent.getModel().getPosition().y + panel.getHeight()/2/2 - 64/2);
         centerTile = new ComponentAdapter() {
             @Override
             public void componentResized(ComponentEvent e) {
@@ -433,7 +435,7 @@ public class MapEditor {
         map = createMapFromWindow(map.getName());
         if(!hasEndTileAvailable()) {
             JSpinner jSpinner = new JSpinner(new SpinnerNumberModel(3, 1, 15, 1));
-            JOptionPane.showConfirmDialog(null, jSpinner, "How Many Laps?", JOptionPane.OK_CANCEL_OPTION, JOptionPane.INFORMATION_MESSAGE);
+            JOptionPane.showMessageDialog(panel, jSpinner, "How Many Laps?", JOptionPane.QUESTION_MESSAGE, moovingRaceWindow.getDialogIcon());
 
             map.setIsLoop(true);
             map.setMaxLaps(((int) jSpinner.getValue()));
@@ -455,7 +457,14 @@ public class MapEditor {
         } catch (IOException e) {
             e.printStackTrace();
         }
+        MapManager.getInstance().loadFromFile();
         System.out.println("Saved in " + file.getAbsolutePath());
+        new Timer().schedule(new TimerTask() {
+            @Override
+            public void run() {
+                moovingRaceWindow.createMenu();
+            }
+        }, 3 * 1000);
     }
 
     private void refreshAllBounds() {

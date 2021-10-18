@@ -7,6 +7,7 @@ import java.io.File;
 import java.io.IOException;
 import java.net.URISyntaxException;
 import java.util.Date;
+import java.util.Objects;
 
 public class InfoTextUI {
     Font font;
@@ -15,7 +16,7 @@ public class InfoTextUI {
         GraphicsEnvironment ge =
                 GraphicsEnvironment.getLocalGraphicsEnvironment();
         try {
-            ge.registerFont(Font.createFont(Font.TRUETYPE_FONT, new File(getClass().getResource("/Minecraft.ttf").toURI())));
+            ge.registerFont(Font.createFont(Font.TRUETYPE_FONT, new File(Objects.requireNonNull(getClass().getResource("/Minecraft.ttf")).toURI())));
         } catch (FontFormatException | IOException | URISyntaxException e) {
             e.printStackTrace();
         }
@@ -36,13 +37,13 @@ public class InfoTextUI {
         long s = (milis - m) / 1000;
         if(model.isStarted())
             g.drawString(s + ":" + m,
-                xWindow - 100,
+                xWindow - 150,
                 50);
         else {
             g.setFont(startingFont);
             g.drawString("" + Math.abs(s),
                     xWindow/2,
-                    yWindow/2);
+                    yWindow/4);
         }
 
     }

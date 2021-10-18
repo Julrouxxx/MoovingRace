@@ -29,13 +29,15 @@ public class CarModel {
     private TrackTile currentTile;
     private int lap = 1;
     private Date startDate;
+    private boolean requestEnd;
     private Date endDate;
-    private boolean loop = true;
+    private boolean loop;
     private float velocity;
     private Car car;
     private boolean isStarted;
     private JPanel context;
     private boolean hasEnded;
+    private Timer timer;
     private float rotation;
     private final List<TrackTile> tiles;
     private boolean isCollided = false;
@@ -54,7 +56,8 @@ public class CarModel {
         this.tiles = new ArrayList<>();
         this.context = context;
 
-        new Timer().schedule(new TimerTask() {
+        this.timer = new Timer();
+        timer.schedule(new TimerTask() {
             @Override
             public void run() {
                 triggerListeners();
@@ -74,7 +77,9 @@ public class CarModel {
                 reversePosition();
                 car.refreshBound();
                 updateWindow();
-                countLap();
+                if(!hasEnded)
+                    countLap();
+
             }
         }, 17, 17);
 
@@ -105,6 +110,8 @@ public class CarModel {
                     isUp = true;
                 } else if(e.getKeyCode() == KeyEvent.VK_DOWN) {
                     isDown = true;
+                }else if(e.getKeyCode() == KeyEvent.VK_ESCAPE){
+                    requestEnd = true;
                 }
             }
         });
@@ -123,6 +130,10 @@ public class CarModel {
 
     public boolean isLoop() {
         return loop;
+    }
+
+    public boolean isEndRequested() {
+        return requestEnd;
     }
 
     public JPanel getContext() {
@@ -200,6 +211,7 @@ public class CarModel {
                 {
                     this.positionX = ((TrackTile) component).getModel().getPosition().x + 32 - 13;
                     this.positionY = ((TrackTile) component).getModel().getPosition().y + 32 - 13;
+                    this.rotation = ((TrackTile) component).getModel().getRotation().getRotation();
                     //System.out.println(getPosition());
 
                 }
@@ -284,9 +296,14 @@ public class CarModel {
     }
 
     private void countLap(){
-        if(!loop) return;
         long test = tiles.stream().filter(c -> c.getModel().isPassed()).count();
         if(test < tiles.size()) return;
+        if(!loop) {
+            if(currentTile.getModel().getType() != TrackType.TRACK_END) return;
+            hasEnded = true;
+            endDate = new Date();
+            return;
+        }
         if(currentTile.getModel().getType() != TrackType.TRACK_START) return;
         tiles.forEach(c -> c.getModel().setPassed(false));
         lap++;
@@ -319,5 +336,9 @@ public class CarModel {
 
     public boolean hasEnded() {
         return hasEnded;
+    }
+
+    public void end(){
+        timer.cancel();
     }
 }

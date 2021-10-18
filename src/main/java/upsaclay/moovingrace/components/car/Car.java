@@ -17,11 +17,13 @@ public class Car extends JComponent {
         this.carModel = new CarModel(this, context, map);
         this.ui = new CarUI();
         this.context = context;
+
     }
 
     @Override
     public void paintComponent(Graphics g) {
         super.paintComponents(g);
+
         ((Graphics2D) g).setRenderingHint(RenderingHints.KEY_ANTIALIASING,
                 RenderingHints.VALUE_ANTIALIAS_ON);
         this.ui.paint((Graphics2D)g, this);
@@ -38,7 +40,6 @@ public class Car extends JComponent {
         carModel.setOffSetX(context.getSize().width/2.0f - Math.round(MoovingRaceWindow.scale*25)/2.0f);
         carModel.setOffSetY(context.getSize().height/2.0f - Math.round(MoovingRaceWindow.scale*25)/2.0f);
         //System.out.println(carModel.getPosition());
-        repaint();
     }
     public void addChangeListener(ChangeListener changeListener){
         getModel().getChangeListeners().add(changeListener);
