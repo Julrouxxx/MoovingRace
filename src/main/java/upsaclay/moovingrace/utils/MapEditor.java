@@ -48,6 +48,12 @@ public class MapEditor {
         updateOnResize(trackTile_start);
     }
 
+    /**
+     * load track tile without event on it
+     * @param track
+     * @param scale
+     * @return
+     */
     private TrackTile loadImage(Track track, int scale) {
 
         TrackTile trackTile = new TrackTile(track.getType(), track.getRotation(), scale, new Point(track.getPositionX(scale), track.getPositionY(scale)));
@@ -57,6 +63,13 @@ public class MapEditor {
         return trackTile;
     }
 
+    /**
+     * load track tile button with event to create new tile
+     * and destroy button parent if event occurs
+     * @param track
+     * @param scale
+     * @param trackTileParent
+     */
     private void loadButton(Track track, int scale, TrackTile trackTileParent) {
 
         TrackTile trackTile = new TrackTile(track.getId(), track.getType(), track.getRotation(), scale, new Point(track.getPositionX(scale), track.getPositionY(scale)));
@@ -116,6 +129,12 @@ public class MapEditor {
         panel.add(trackTile);
     }
 
+    /**
+     * make able to link track together by putting shift track between tile
+     * @param model
+     * @param track
+     * @param scale
+     */
     private void matchShift(TrackTileModel model, Track track, int scale) {
         if(track.getPositionX(1) != (int) model.getPosition().getX()/ scale) {
             if(track.getPositionX(1) < (int) model.getPosition().getX()/ scale) {
@@ -198,6 +217,10 @@ public class MapEditor {
         }
     }
 
+    /**
+     * remove track tile button that have the same id of the parent
+     * @param trackTileParent
+     */
     private void removeChildren(TrackTile trackTileParent) {
 
         for (Component component : panel.getComponents()) {
@@ -214,6 +237,13 @@ public class MapEditor {
         }
         panel.repaint();
     }
+
+    /**
+     * is there is a tile at this position .
+     * @param x
+     * @param y
+     * @return can we put a tile there ?
+     */
     private boolean isTileAvailable(int x, int y) {
 
         for (Component component : panel.getComponents()) {
@@ -227,6 +257,11 @@ public class MapEditor {
         }
         return true;
     }
+
+    /**
+     * is there a end tile on map ?
+     * @return
+     */
     private boolean hasEndTileAvailable() {
 
         for (Component component : panel.getComponents()) {
@@ -240,6 +275,10 @@ public class MapEditor {
         return false;
     }
 
+    /**
+     * match the last tile to the start tile
+     * @param trackTileButton
+     */
     private void matchToStart(TrackTile trackTileButton) {
 
         for (Component component : panel.getComponents()) {
@@ -326,6 +365,10 @@ public class MapEditor {
         }
     }
 
+    /**
+     * create button around a parent
+     * @param trackTileParent
+     */
     private void createButton(TrackTile trackTileParent) {
 
         MoovingRaceWindow.positionTranslate.setLocation(-trackTileParent.getModel().getPosition().x + panel.getWidth()/2/2 - 64/2, -trackTileParent.getModel().getPosition().y + panel.getHeight()/2/2 - 64/2);
@@ -391,6 +434,10 @@ public class MapEditor {
 
     }
 
+    /**
+     * center tile when window resize
+     * @param trackTileParent
+     */
     private void updateOnResize(TrackTile trackTileParent) {
 
 
@@ -410,6 +457,11 @@ public class MapEditor {
     }
 
 
+    /**
+     * create a map structure by analyzing what is showing in window
+     * @param mapName
+     * @return map to save
+     */
     private Map createMapFromWindow(String mapName) {
 
         Map map = new Map(mapName, 64);
@@ -430,6 +482,9 @@ public class MapEditor {
     }
 
 
+    /**
+     * saved the map and return to menu
+     */
     private void endTrack() {
 
         map = createMapFromWindow(map.getName());
@@ -462,6 +517,9 @@ public class MapEditor {
         moovingRaceWindow.createMenu();
     }
 
+    /**
+     * refresh bounds of all tile
+     */
     private void refreshAllBounds() {
         for (Component component : panel.getComponents()) {
             if(component instanceof TrackTile){

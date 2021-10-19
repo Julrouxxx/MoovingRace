@@ -30,9 +30,14 @@ public class Car extends JComponent {
         this.ui.paint((Graphics2D)g, this);
     }
 
+
     public CarModel getModel() {
         return carModel;
     }
+
+    /**
+     * refresh the bound of the car (must do it for collision and position update)
+     */
     public void refreshBound() {
         setBounds(context.getSize().width/2 - Math.round(MoovingRaceWindow.scale*25)/2,
                 context.getSize().height/2 - Math.round(MoovingRaceWindow.scale*25)/2,

@@ -44,6 +44,13 @@ public class CarModel {
     private boolean isRight = false;
     private boolean isLeft = false;
     private Map map;
+
+    /**
+     * Car model constructor
+     * @param car
+     * @param context
+     * @param map
+     */
     public CarModel(Car car, JPanel context, Map map) {
         loadImage();
         this.velocity = 0;
@@ -85,18 +92,34 @@ public class CarModel {
     }
 
 
+    /**
+     * set the input up
+     * @param up
+     */
     public void setUp(boolean up) {
         isUp = up;
     }
 
+    /**
+     * set the input down
+     * @param down
+     */
     public void setDown(boolean down) {
         isDown = down;
     }
 
+    /**
+     * set the input left
+     * @param left
+     */
     public void setLeft(boolean left) {
         isLeft = left;
     }
 
+    /**
+     * set the input right
+     * @param right
+     */
     public void setRight(boolean right) {
         isRight = right;
     }
@@ -109,6 +132,9 @@ public class CarModel {
         return changeListeners;
     }
 
+    /**
+     * cancel the previous velocity if collision occurs
+     */
     private void reverseVelocity() {
         if(!isCollided){
             return;
@@ -128,6 +154,9 @@ public class CarModel {
         return context;
     }
 
+    /**
+     * cancel the previous position if collision occurs
+     */
     private void reversePosition() {
         if(!isCollided){
             return;
@@ -137,10 +166,18 @@ public class CarModel {
         this.velocity = 0;
         //System.out.println(this.position);
     }
+
+    /**
+     * make the camera follow the car
+     */
     private void updateWindow(){
         MoovingRaceWindow.positionTranslate.setLocation(-positionX + offSetX/2, -positionY + offSetY/2);
         tiles.forEach(TrackTile::refreshBound);
     }
+
+    /**
+     * update the position of the car depending of rotation and velocity
+     */
     private void updatePosition() {
         this.positionX += this.velocity * Math.cos(Math.toRadians(getRotation()));
         this.positionY += this.velocity * Math.sin(Math.toRadians(getRotation()));
@@ -151,6 +188,10 @@ public class CarModel {
         return isStarted;
     }
 
+    /**
+     * check if car is on alpha of a track tile
+     * @return is collision occurs ?
+     */
     private boolean checkCollision() {
         for (TrackTile collision : tiles) {
             if(!collision.getBounds().intersects(car.getBounds())) continue;
@@ -177,12 +218,18 @@ public class CarModel {
         return true;
     }
 
+    /**
+     * update the velocity to slow the car smoothly
+     */
     private void updateVelocity() {
 
         this.velocity = this.velocity * DECELERATION;
         //System.out.println(this.velocity);
     }
 
+    /**
+     * load car image
+     */
     private void loadImage() {
         try {
             sprite = ImageIO.read(Objects.requireNonNull(getClass().getResourceAsStream("/Sprites/car_sprite.png")));
@@ -190,6 +237,10 @@ public class CarModel {
             e.printStackTrace();
         }
     }
+
+    /**
+     * init car position and rotation depending of the track start
+     */
     public void start(){
 
         for (Component component : context.getComponents()) {

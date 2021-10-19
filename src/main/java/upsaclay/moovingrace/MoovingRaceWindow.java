@@ -21,6 +21,9 @@ public class MoovingRaceWindow extends JFrame {
     public static Point positionTranslate;
     public static float scale;
 
+    /**
+     * constructor (load menu)
+     */
     public MoovingRaceWindow() {
 
         super("MoovingRace");
@@ -65,20 +68,6 @@ public class MoovingRaceWindow extends JFrame {
         panel.setBackground(Color.green);
         add(panel, BorderLayout.CENTER);
         createMenu();
-/*        GsonBuilder gsonBuilder = new GsonBuilder();
-        gsonBuilder.registerTypeAdapter(Map.class, new MapSerializer());
-        Gson gson = gsonBuilder.create();
-        try {
-            Map test = gson.fromJson(new FileReader(Main.getWorkingDirectory()+"/test.json"), Map.class);
-            MapManager.getInstance().getMaps().add(test);
-        } catch (FileNotFoundException e) {
-            e.printStackTrace();
-        }
-        createGame(MapManager.getInstance().getMapByName("test"));*/
-        //createMapEditor("test");
-
-        //Map map2 = createMapFromWindow("aa");
-        //System.out.println(map2.getTracks().size());
         pack();
         repaint();
     }
@@ -96,6 +85,9 @@ public class MoovingRaceWindow extends JFrame {
 
     }
 
+    /**
+     * refresh all bounds
+     */
     private void refreshAllBounds() {
         for (Component component : panel.getComponents()) {
             if(component instanceof TrackTile){
@@ -108,7 +100,9 @@ public class MoovingRaceWindow extends JFrame {
         }
     }
 
-
+    /**
+     * create menu UI
+     */
     public void createMenu() {
         panel.removeAll();
         panel.setLayout(new BoxLayout(panel, BoxLayout.Y_AXIS));
@@ -145,6 +139,10 @@ public class MoovingRaceWindow extends JFrame {
         panel.revalidate();
     }
 
+    /**
+     * replace java icon by a car in dialog
+     * @return
+     */
     public ImageIcon getDialogIcon() {
         try {
             return new ImageIcon(Objects.requireNonNull(getClass().getResourceAsStream("/Sprites/car_sprite.png")).readAllBytes());
@@ -154,6 +152,10 @@ public class MoovingRaceWindow extends JFrame {
         return null;
     }
 
+    /**
+     * create map editor ui
+     * @param mapName
+     */
     public void createMapEditor(String mapName) {
         panel.removeAll();
         panel.setLayout(null);
@@ -162,6 +164,10 @@ public class MoovingRaceWindow extends JFrame {
 
     }
 
+    /**
+     * create game UI (load map, etc)
+     * @param map
+     */
     public void createGame(Map map) {
         panel.removeAll();
         panel.setLayout(null);
