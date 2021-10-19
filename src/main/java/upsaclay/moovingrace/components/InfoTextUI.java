@@ -3,22 +3,12 @@ package upsaclay.moovingrace.components;
 import upsaclay.moovingrace.components.car.CarModel;
 
 import java.awt.*;
-import java.io.IOException;
 import java.util.Date;
-import java.util.Objects;
 
 public class InfoTextUI {
     Font font;
     Font startingFont;
     public InfoTextUI(){
-        GraphicsEnvironment ge =
-                GraphicsEnvironment.getLocalGraphicsEnvironment();
-        try {
-
-            ge.registerFont(Font.createFont(Font.TRUETYPE_FONT, (Objects.requireNonNull(getClass().getResourceAsStream("/Minecraft.ttf")))));
-        } catch (FontFormatException | IOException e) {
-            e.printStackTrace();
-        }
         font = new Font("Minecraft", Font.PLAIN, 32);
         startingFont = new Font("Minecraft", Font.PLAIN, 64);
 

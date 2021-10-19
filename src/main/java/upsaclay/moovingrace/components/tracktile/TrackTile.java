@@ -31,7 +31,7 @@ public class TrackTile extends JComponent {
 
         this.model = new TrackTileModel(type, rotation, position);
 
-        this.ui = new TrackTileUI(this);
+        this.ui = new TrackTileUI();
     }
 
     /**
@@ -47,7 +47,7 @@ public class TrackTile extends JComponent {
 
         this.model = new TrackTileModel(id, type, rotation, position);
 
-        this.ui = new TrackTileUI(this);
+        this.ui = new TrackTileUI();
     }
 
     public TrackTileModel getModel() {

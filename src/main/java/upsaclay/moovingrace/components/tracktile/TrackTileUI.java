@@ -9,9 +9,6 @@ import java.awt.geom.AffineTransform;
 import static upsaclay.moovingrace.components.tracktile.TrackTile.sprites;
 
 public class TrackTileUI {
-    public TrackTileUI(TrackTile trackTile) {
-
-    }
 
     public void paint(Graphics2D g, TrackTile trackTile) {
 
