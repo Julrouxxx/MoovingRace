@@ -43,7 +43,7 @@ public class CarModel {
     private boolean isDown = false;
     private boolean isRight = false;
     private boolean isLeft = false;
-    private Map map;
+    private final Map map;
 
     /**
      * Car model constructor

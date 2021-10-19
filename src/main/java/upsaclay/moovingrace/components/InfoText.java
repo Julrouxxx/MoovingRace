@@ -5,6 +5,9 @@ import upsaclay.moovingrace.components.car.Car;
 import javax.swing.*;
 import java.awt.*;
 
+/**
+ * Provides Text about Time and Loop
+ */
 public class InfoText extends JComponent {
     private Car car;
     private InfoTextUI ui;

@@ -19,6 +19,11 @@ public class MapManager {
         //init
         loadFromFile();
     }
+
+    /**
+     * Load the examples maps used for testing
+     *
+     */
     private void loadExamplesMaps(){
         Map simpleMax = new Map("simple", 64, 3);
         simpleMax.getTracks().add(new Track(TrackType.TRACK_SHIFT, TrackRotation.NORTH, 0, 0));
@@ -58,6 +63,10 @@ public class MapManager {
         map.getTracks().add(new Track(TrackType.TRACK_CLASSIC, TrackRotation.SOUTH, 0, 1));
         maps.add(map);
     }
+
+    /**
+     * Load json of maps from working directory (%APPDATA% on windows user/Library/Application Support/ on macos)
+     */
     public void loadFromFile() {
         maps.clear();
         loadExamplesMaps();
@@ -81,6 +90,10 @@ public class MapManager {
         }
     }
 
+    /**
+     * Get the List of map names in a String array used for the ComboList when selecting a map
+     * @return Array of Map names
+     */
     public String[] getMapList(){
         String[] s = new String[maps.size()];
         for (int i = 0; i < maps.size(); i++) {
@@ -88,10 +101,12 @@ public class MapManager {
         }
         return  s;
     }
-    public ArrayList<Map> getMaps() {
-        return maps;
-    }
 
+    /**
+     * Search a map by it names
+     * @param name Name of the map
+     * @return Map if found, null otherwise
+     */
     public Map getMapByName(String name){
         return maps.stream().filter(m -> m.getName().equalsIgnoreCase(name)).findFirst().orElse(null);
     }

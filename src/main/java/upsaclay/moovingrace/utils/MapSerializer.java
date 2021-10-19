@@ -5,6 +5,8 @@ import com.google.gson.*;
 import java.lang.reflect.Type;
 
 public class MapSerializer implements JsonSerializer<Map>, JsonDeserializer<Map> {
+
+
     @Override
     public JsonElement serialize(Map map, Type type, JsonSerializationContext jsonSerializationContext) {
         JsonObject jsonObject = new JsonObject();

@@ -5,7 +5,6 @@ import upsaclay.moovingrace.utils.TrackType;
 
 import java.awt.*;
 import java.awt.geom.AffineTransform;
-import java.awt.geom.GeneralPath;
 import java.awt.image.BufferedImage;
 
 public class TrackTileModel {
@@ -16,7 +15,7 @@ public class TrackTileModel {
     private TrackRotation rotation;
     private boolean isPassed;
     private Point position;
-    private GeneralPath collisionShape;
+
     public TrackTileModel(TrackType type, TrackRotation rotation, Point position) {
         this.type = type;
         this.rotation = rotation;
@@ -29,6 +28,10 @@ public class TrackTileModel {
         ((Graphics2D) this.image.getGraphics()).drawImage(TrackTile.sprites.get(type), r, null);
     }
 
+    /**
+     * Get the Sprites Image corresponding to the TrackTile
+     * @return BufferedImage corresponding to the sprite of the TrackTile
+     */
     public BufferedImage getImage() {
         return image;
     }
@@ -44,10 +47,17 @@ public class TrackTileModel {
         return type;
     }
 
+    /**
+     * Defines whether the car already step of this track (used for checkpoint)
+     * @param passed whether this track was already step on for this lap
+     */
     public void setPassed(boolean passed) {
         isPassed = passed;
     }
-
+    /**
+     * Get if whether the car already step of this track (used for checkpoint)
+     * @return whether this track was already step on for this lap
+     */
     public boolean isPassed() {
         return isPassed;
     }

@@ -19,6 +19,13 @@ public class TrackTile extends JComponent {
     private TrackTileModel model;
     private TrackTileUI ui;
 
+    /**
+     * Define a Track in the Map
+     * @param type Type Of The Track
+     * @param rotation Rotation of The Track
+     * @param scale Scale of The Track
+     * @param position Position of The Track
+     */
     public TrackTile(TrackType type, TrackRotation rotation, int scale, Point position) {
         InitSprites();
 
@@ -27,6 +34,14 @@ public class TrackTile extends JComponent {
         this.ui = new TrackTileUI(this);
     }
 
+    /**
+     * Define a Track in the Map (used for map editor)
+     * @param id Id of the track (used for map editor)
+     * @param type Type Of The Track
+     * @param rotation Rotation of The Track
+     * @param scale Scale of The Track
+     * @param position Position of The Track
+     */
     public TrackTile(int id, TrackType type, TrackRotation rotation, int scale, Point position) {
         InitSprites();
 
@@ -72,7 +87,9 @@ public class TrackTile extends JComponent {
     public Dimension getMaximumSize() { return getPreferredSize(); }
 
 
-
+    /**
+     * Init Sprites for every type of Track
+     */
     public void InitSprites()
     {
         if(sprites != null && !sprites.isEmpty()) return;
