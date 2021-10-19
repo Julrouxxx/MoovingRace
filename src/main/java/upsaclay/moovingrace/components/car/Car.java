@@ -16,6 +16,7 @@ public class Car extends JComponent {
         setFocusable(true);
         this.carModel = new CarModel(this, context, map);
         this.ui = new CarUI();
+        ui.installUI(this);
         this.context = context;
 
     }

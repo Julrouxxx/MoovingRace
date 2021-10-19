@@ -3,9 +3,46 @@ package upsaclay.moovingrace.components.car;
 import upsaclay.moovingrace.MoovingRaceWindow;
 
 import java.awt.*;
+import java.awt.event.KeyAdapter;
+import java.awt.event.KeyEvent;
 import java.awt.geom.AffineTransform;
 
 public class CarUI {
+
+    public void installUI(Car car){
+        CarModel m = car.getModel();
+        car.addKeyListener(new KeyAdapter() {
+            @Override
+            public void keyReleased(KeyEvent e) {
+                super.keyReleased(e);
+                if(e.getKeyCode() == KeyEvent.VK_LEFT) {
+                    m.setLeft(false);
+                } else if(e.getKeyCode() == KeyEvent.VK_RIGHT) {
+                    m.setRight(false);
+                } else if(e.getKeyCode() == KeyEvent.VK_UP) {
+                    m.setUp(false);
+                } else if(e.getKeyCode() == KeyEvent.VK_DOWN) {
+                    m.setDown(false);
+                }
+            }
+
+            @Override
+            public void keyPressed(KeyEvent e) {
+                super.keyPressed(e);
+                if(e.getKeyCode() == KeyEvent.VK_LEFT) {
+                    m.setLeft(true);
+                } else if(e.getKeyCode() == KeyEvent.VK_RIGHT) {
+                    m.setRight(true);
+                } else if(e.getKeyCode() == KeyEvent.VK_UP) {
+                    m.setUp(true);
+                } else if(e.getKeyCode() == KeyEvent.VK_DOWN) {
+                    m.setDown(true);
+                }else if(e.getKeyCode() == KeyEvent.VK_ESCAPE){
+                    m.setRequestEnd(true);
+                }
+            }
+        });
+    }
 
     public void paint(Graphics2D g, Car car) {
         CarModel model = car.getModel();

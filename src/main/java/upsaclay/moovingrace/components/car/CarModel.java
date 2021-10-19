@@ -10,8 +10,6 @@ import javax.swing.*;
 import javax.swing.event.ChangeEvent;
 import javax.swing.event.ChangeListener;
 import java.awt.*;
-import java.awt.event.KeyAdapter;
-import java.awt.event.KeyEvent;
 import java.io.IOException;
 import java.util.List;
 import java.util.Timer;
@@ -84,37 +82,26 @@ public class CarModel {
         }, 17, 17);
 
 
-        car.addKeyListener(new KeyAdapter() {
-            @Override
-            public void keyReleased(KeyEvent e) {
-                super.keyReleased(e);
-                if(e.getKeyCode() == KeyEvent.VK_LEFT) {
-                    isLeft = false;
-                } else if(e.getKeyCode() == KeyEvent.VK_RIGHT) {
-                    isRight = false;
-                } else if(e.getKeyCode() == KeyEvent.VK_UP) {
-                    isUp = false;
-                } else if(e.getKeyCode() == KeyEvent.VK_DOWN) {
-                    isDown = false;
-                }
-            }
+    }
 
-            @Override
-            public void keyPressed(KeyEvent e) {
-                super.keyPressed(e);
-                if(e.getKeyCode() == KeyEvent.VK_LEFT) {
-                    isLeft = true;
-                } else if(e.getKeyCode() == KeyEvent.VK_RIGHT) {
-                    isRight = true;
-                } else if(e.getKeyCode() == KeyEvent.VK_UP) {
-                    isUp = true;
-                } else if(e.getKeyCode() == KeyEvent.VK_DOWN) {
-                    isDown = true;
-                }else if(e.getKeyCode() == KeyEvent.VK_ESCAPE){
-                    requestEnd = true;
-                }
-            }
-        });
+    public void setUp(boolean up) {
+        isUp = up;
+    }
+
+    public void setDown(boolean down) {
+        isDown = down;
+    }
+
+    public void setLeft(boolean left) {
+        isLeft = left;
+    }
+
+    public void setRight(boolean right) {
+        isRight = right;
+    }
+
+    public void setRequestEnd(boolean requestEnd) {
+        this.requestEnd = requestEnd;
     }
 
     public ArrayList<ChangeListener> getChangeListeners() {

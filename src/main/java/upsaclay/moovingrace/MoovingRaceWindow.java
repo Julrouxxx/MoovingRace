@@ -148,7 +148,7 @@ public class MoovingRaceWindow extends JFrame {
         panel.add(quitButton);
         panel.add(Box.createVerticalGlue());
         panel.repaint();
-        panel.validate();
+        panel.revalidate();
     }
 
     public ImageIcon getDialogIcon() {
