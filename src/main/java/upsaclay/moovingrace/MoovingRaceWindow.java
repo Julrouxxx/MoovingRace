@@ -117,17 +117,48 @@ public class MoovingRaceWindow extends JFrame {
         panel.removeAll();
         panel.setLayout(new BoxLayout(panel, BoxLayout.Y_AXIS));
         panel.add(Box.createVerticalGlue());
-        JLabel iconLabel = new JLabel(new ImageIcon(getDialogIcon().getImage().getScaledInstance(100, 61, Image.SCALE_DEFAULT)));
-        iconLabel.setAlignmentX(Component.CENTER_ALIGNMENT);
-        panel.add(iconLabel);
-        JLabel titleLabel = new JLabel("MoovingRace");
         Font titleFont = new Font("Minecraft", Font.PLAIN, 64);
         Font buttonFont = new Font("Minecraft", Font.PLAIN, 16);
+        panel.add(getIconLabel());
+        panel.add(getTitleLabel(titleFont));
+        panel.add(getPlayButton(buttonFont));
+        panel.add(getEditorButton(buttonFont));
+        panel.add(getQuitButton(buttonFont));
+        panel.add(Box.createVerticalGlue());
+        panel.repaint();
+        panel.revalidate();
+    }
 
-        titleLabel.setFont(titleFont);
-        titleLabel.setAlignmentX(Component.CENTER_ALIGNMENT);
-        titleLabel.setBorder(new EmptyBorder(0, 0, 50, 0));
-        panel.add(titleLabel);
+    private JButton getQuitButton(Font buttonFont) {
+        JButton quitButton = new JButton("Quit");
+        quitButton.setFont(buttonFont);
+        quitButton.addActionListener(e -> dispose());
+        quitButton.setBackground(new Color(0, 170, 170));
+        quitButton.setFocusPainted(false);
+        quitButton.setBorderPainted(false);
+
+        quitButton.setAlignmentX(Component.CENTER_ALIGNMENT);
+        return quitButton;
+    }
+
+    private JButton getEditorButton(Font buttonFont) {
+        JButton editorButton = new JButton("Map Editor");
+        editorButton.setFont(buttonFont);
+        editorButton.setBackground(new Color(0, 170, 170));
+        editorButton.setFocusPainted(false);
+        editorButton.setBorderPainted(false);
+
+        editorButton.addActionListener(e ->{
+            JTextField mapNameField = new JTextField();
+            int c = JOptionPane.showConfirmDialog(panel, mapNameField, "Choose map name", JOptionPane.OK_CANCEL_OPTION, JOptionPane.QUESTION_MESSAGE, getDialogIcon());
+            if (c != 0 || mapNameField.getText().isBlank()) return;
+            createMapEditor(mapNameField.getText());
+        });
+        editorButton.setAlignmentX(Component.CENTER_ALIGNMENT);
+        return editorButton;
+    }
+
+    private JButton getPlayButton(Font buttonFont) {
         JButton playButton = new JButton("Play!");
         playButton.setFont(buttonFont);
         playButton.setBackground(new Color(0, 170, 170));
@@ -143,36 +174,23 @@ public class MoovingRaceWindow extends JFrame {
 
         });
         playButton.setAlignmentX(Component.CENTER_ALIGNMENT);
+        return playButton;
+    }
 
-        panel.add(playButton);
+    private JLabel getTitleLabel(Font titleFont) {
+        JLabel titleLabel = new JLabel("MoovingRace");
 
-        JButton editorButton = new JButton("Map Editor");
-        editorButton.setFont(buttonFont);
-        editorButton.setBackground(new Color(0, 170, 170));
-        editorButton.setFocusPainted(false);
-        editorButton.setBorderPainted(false);
 
-        editorButton.addActionListener(e ->{
-            JTextField mapNameField = new JTextField();
-            int c = JOptionPane.showConfirmDialog(panel, mapNameField, "Choose map name", JOptionPane.OK_CANCEL_OPTION, JOptionPane.QUESTION_MESSAGE, getDialogIcon());
-            if (c != 0 || mapNameField.getText().isBlank()) return;
-            createMapEditor(mapNameField.getText());
-        });
-        editorButton.setAlignmentX(Component.CENTER_ALIGNMENT);
+        titleLabel.setFont(titleFont);
+        titleLabel.setAlignmentX(Component.CENTER_ALIGNMENT);
+        titleLabel.setBorder(new EmptyBorder(0, 0, 50, 0));
+        return titleLabel;
+    }
 
-        panel.add(editorButton);
-        JButton quitButton = new JButton("Quit");
-        quitButton.setFont(buttonFont);
-        quitButton.addActionListener(e -> dispose());
-        quitButton.setBackground(new Color(0, 170, 170));
-        quitButton.setFocusPainted(false);
-        quitButton.setBorderPainted(false);
-
-        quitButton.setAlignmentX(Component.CENTER_ALIGNMENT);
-        panel.add(quitButton);
-        panel.add(Box.createVerticalGlue());
-        panel.repaint();
-        panel.revalidate();
+    private JLabel getIconLabel() {
+        JLabel iconLabel = new JLabel(new ImageIcon(getDialogIcon().getImage().getScaledInstance(100, 61, Image.SCALE_DEFAULT)));
+        iconLabel.setAlignmentX(Component.CENTER_ALIGNMENT);
+        return iconLabel;
     }
 
     /**
