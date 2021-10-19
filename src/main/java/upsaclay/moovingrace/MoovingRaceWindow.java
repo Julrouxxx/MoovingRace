@@ -31,27 +31,6 @@ public class MoovingRaceWindow extends JFrame {
         //setUndecorated(true);
 
         positionTranslate = new Point(0, 0);
-        addKeyListener(new KeyAdapter() {
-            @Override
-            public void keyPressed(KeyEvent e) {
-                super.keyPressed(e);
-                if(e.getKeyCode() == KeyEvent.VK_LEFT) {
-                    positionTranslate.x++;
-                }
-                if(e.getKeyCode() == KeyEvent.VK_RIGHT) {
-                    positionTranslate.x--;
-                }
-                if(e.getKeyCode() == KeyEvent.VK_UP) {
-                    positionTranslate.y++;
-                }
-                if(e.getKeyCode() == KeyEvent.VK_DOWN) {
-                    positionTranslate.y--;
-                }
-                refreshAllBounds();
-                repaint();
-                System.out.println(panel.getComponents().length);
-            }
-        });
 
         addComponentListener(new ComponentAdapter() {
             @Override
@@ -67,6 +46,21 @@ public class MoovingRaceWindow extends JFrame {
 
 
         panel = new JPanel();
+        panel.addKeyListener(new KeyAdapter() {
+            /**
+             * Invoked when a key has been pressed.
+             *
+             * @param e
+             */
+            @Override
+            public void keyPressed(KeyEvent e) {
+                super.keyPressed(e);
+                if(e.getKeyCode() == KeyEvent.VK_ESCAPE) {
+                    createMenu();
+                }
+            }
+        });
+        panel.setFocusable(true);
         panel.setLayout(null);
         panel.setBackground(Color.green);
         add(panel, BorderLayout.CENTER);
@@ -164,6 +158,8 @@ public class MoovingRaceWindow extends JFrame {
         panel.removeAll();
         panel.setLayout(null);
         new MapEditor(mapName, this);
+        panel.repaint();
+
     }
 
     public void createGame(Map map) {

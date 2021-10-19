@@ -28,6 +28,7 @@ public class MapEditor {
         this.moovingRaceWindow = moovingRaceWindow;
         this.panel = moovingRaceWindow.getPanel();
         this.map = new Map(mapName, 64);
+
         Track track = new Track(0, TrackType.TRACK_START, TrackRotation.EAST, 10, 10);
         map.getTracks().add(track);
         TrackTile trackTile_start = loadImage(track, map.getScale());
@@ -415,6 +416,7 @@ public class MapEditor {
         for (Component component : panel.getComponents()) {
             if(component instanceof TrackTile){
                 TrackTile tile = ((TrackTile) component);
+                if(tile.getModel().getType() == TrackType.TRACK_BUTTON) continue;
 
                 Track track = new Track(tile.getModel().getType(),
                         tile.getModel().getRotation(),

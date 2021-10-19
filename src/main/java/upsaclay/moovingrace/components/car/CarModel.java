@@ -84,6 +84,7 @@ public class CarModel {
 
     }
 
+
     public void setUp(boolean up) {
         isUp = up;
     }
