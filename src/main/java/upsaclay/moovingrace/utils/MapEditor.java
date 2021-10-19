@@ -17,6 +17,8 @@ import java.io.BufferedWriter;
 import java.io.File;
 import java.io.FileWriter;
 import java.io.IOException;
+import java.util.Timer;
+import java.util.TimerTask;
 
 public class MapEditor {
     public Map map;
@@ -514,7 +516,12 @@ public class MapEditor {
         }
         MapManager.getInstance().loadFromFile();
         System.out.println("Saved in " + file.getAbsolutePath());
-        moovingRaceWindow.createMenu();
+        new Timer().schedule(new TimerTask() {
+            @Override
+            public void run() {
+                moovingRaceWindow.createMenu();
+            }
+        }, 1000);
     }
 
     /**
